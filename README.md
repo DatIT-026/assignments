@@ -1,2 +1,2 @@
-# assignments
-This is my assignments
+# Assignments
+This is my assignments workspace.
