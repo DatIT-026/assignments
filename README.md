@@ -1,7 +1,7 @@
 # Assignments
 This is my assignment workspace.
 
-## How to use it?
+## How to use?
 CSI106: using Typst to modify the .pdf file.
 
 PRF192: using Dev C++ or Visual Studio Code to read/write and run the program in C language.
