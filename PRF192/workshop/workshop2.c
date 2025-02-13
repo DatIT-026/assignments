@@ -7,12 +7,10 @@ float input_basic_salary() {
 
   while (1) {
     scanf("%f", &salary);
-
     if (salary < 0) {
       printf("Invalid salary. Salary must be at least 0. Try again: ");
       continue;
     }
-
     break;
   }
 
@@ -44,7 +42,6 @@ double allowance_calculation(float basic_salary) {
     allowance = 0.1;
     break;
   }
-
   return allowance;
 }
 
@@ -55,7 +52,6 @@ float calculate_tax(float salary) {
     float amount_exceeding = salary - 8e6;
     income_tax = amount_exceeding * 0.1;
   }
-
   return income_tax;
 }
 
@@ -82,10 +78,10 @@ int main() {
   for (int i = 0; i < num_employees; i++) {
     printf("Employee %d\n", i+1);
 
-    // Function to input basic salary
+    // Input basic salary
     float basic_salary = input_basic_salary();
 
-    // Function to calculate allowance
+    // Calculate allowance
     float allowance = allowance_calculation(basic_salary);
     float total_salary_allowance = basic_salary + (basic_salary * allowance);
 
@@ -94,13 +90,13 @@ int main() {
 
     switch (allowance_type) {
     case 0:
-      count_25 += 1;
+      count_25++;
       break;
     case 1:
-      count_15 += 1;
+      count_15++;
       break;
     case 2:
-      count_10 += 1;
+      count_10++;
       break;
     }
 
@@ -108,10 +104,9 @@ int main() {
     float income_tax = calculate_tax(total_salary_allowance);
     float net_income = total_salary_allowance - income_tax;
 
-    // Update total salary
     total_salary += net_income;
 
-    // Display employee details
+    // Show employee details
     printf("Basic salary: %.2f\n", basic_salary);
     printf("Allowance: %.2f\n", basic_salary * allowance);
     printf("Tax deduction: %.2f\n", income_tax);
@@ -119,11 +114,11 @@ int main() {
     printf("\n");
   }
 
-  // Display salary statistics
+  // Show salary statistics
   printf("Total salary cost of the company: %.2f\n", total_salary);
   printf("Employees with allowance of 25%%: %d\n", count_25);
-  printf("Employees of allowance of 15%%: %d\n", count_15);
-  printf("Employees of allowance of 10%%: %d\n", count_10);
+  printf("Employees with allowance of 15%%: %d\n", count_15);
+  printf("Employees with allowance of 10%%: %d\n", count_10);
 
   return 0;
 }
