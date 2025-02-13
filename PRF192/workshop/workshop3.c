@@ -43,6 +43,7 @@ int searchValue(int arr[], int size, int target) {
 
 void calculateStatistics(int arr[], int size) {
     int sum = 0, count = size, maxValue = arr[0], minValue = arr[0];
+    
     for(int i = 0; i < size; ++i) {
         // Calculate the sum of all elements
         sum += arr[i];
