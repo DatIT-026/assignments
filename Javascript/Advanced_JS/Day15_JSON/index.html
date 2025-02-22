@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>30 Days of JavaScript</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <style>
+        pre {
+            font-size: 12px;
+            font-family: Fira Code;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Day 15: JSON</h1>
+    <p><b>JSON</b> stands for JS Object Notation. The JSON syntax is derived from JS object notation syntax,
+        but the JSON format is text or string only. JSON is a light weight data format for storing and transporting.
+        JSON is mostly used when data is sent from a server to a client. JSON is an easier-to-use alternative to XML.
+    </p>
+
+    <p>For Example: (You can import and view the example in "example.json" file).</p>
+
+    <div>
+        <p>The above JSON example is not much different from a normal obj. Then, what is the difference?
+            The difference is the key of a JSON obj should be with <i>double quotes</i> or it should be a <i>string</i>.
+            JS Object and JSON are very similar that we can change JSON to Obj and vice versa.
+        </p>
+        <p>Let's see more examples about JSON. (example2.json)</p>
+    </div>
+
+    <div>
+        <h3>So, how to convert JSON to JS Object?</h3>
+        <p>Mostly we fetch JSON data from HTTP response or from a file, but we can store the JSON as a string and we can
+            chenge to Object for sake of demonstration.
+            In JS, the keyword JSON has <code>parse()</code> and <code>stringify()</code> methods.
+            When we want to change:</p>
+        <li> The JSON → an obj: use JSON.parse().</li>
+        <li> The object → JSON: use JSON.stringify()</li>
+        <p><b>JSON.parse()</b></p>
+        <pre>
+                JSON.parse(json[, reviver])
+                // json or text , the data
+                // reviver is an optional callback function
+                /* JSON.parse(json, (key, value) => {
+
+                })
+                */
+            </pre>
+        <p>Example: (You can open the console to view the result).</p>
+        <pre>
+                const usersText = `{
+                    "users":[
+                    {
+                        "firstName":"Datto",
+                        "lastName":"Kiyoshi",
+                        "age":21,
+                        "email":"tiendatha2006@gmail.com"
+                    },
+                    {
+                        "firstName":"Alex",
+                        "lastName":"James",
+                        "age":25,
+                        "email":"alex@alex.com"
+                    },
+                    {
+                        "firstName":"Lidiya",
+                        "lastName":"Tekle",
+                        "age":28,
+                        "email":"lidiya@lidiya.com"
+                    }
+                    ]
+                }`
+
+                const usersObj = JSON.parse(usersText, undefined, 4);
+                console.log(userObj);
+            </pre>
+    </div>
+
+    <div>
+        <h3>Using a reviver function with JSON.parse()</h3>
+        <p>To use the reviver function as a formatter, we put the keys we wanna format first name and last name value.
+            Let us say, we are interested to format the firstName and lasttName of the JSON data.
+        </p>
+        <pre>
+                const usersText = `{
+                    "users":[
+                      {
+                        "firstName":"Datto",
+                        "lastName":"Kiyoshi",
+                        "age":21,
+                        "email":"tiendatha2006@gmail.com"
+                      },
+                      {
+                        "firstName":"Alex",
+                        "lastName":"James",
+                        "age":25,
+                        "email":"alex@alex.com"
+                      },
+                      {
+                        "firstName":"Lidiya",
+                        "lastName":"Tekle",
+                        "age":28,
+                        "email":"lidiya@lidiya.com"
+                      }
+                    ]
+                }`
+    
+                const usersObj = JSON.parse(usersText, (key, value) => {
+                    let newValue = 
+                        typeof value == "string" && key != "email" 
+                            ? value.toUpperCase() 
+                            : value;
+                    return newValue;
+                });
+                console.log(userObj);
+                </pre>
+        <p>The <i>JSON.parse()</i> is very handy to use. You do not have to pass optional parameter, you can use use it
+            with the required
+            parameter and you will achieve quite a lot.</p>
+    </div>
+
+    <div>
+        <h3>How to convert Object to JSON?</h3>
+        <p>
+            When we wanna change the obj to JSON, we use <i>JSON.stringify()</i>.
+            The stringify method takes one required parameter and 2 optional parameters.
+            The replacer is used as filter and the space is an indentations.
+        </p>
+        <p>
+            If we do not want to filter out any of the keys from the obj, we can just pass undefined.
+        </p>
+        <p><b>JSON.stringify()</b></p>
+        <pre>
+                JSON.stringify(obj, replacer, space)
+                // json or text, the data
+                // reviver is an optional callback function
+            </pre>
+        <p>Lets convert the following object to a string. First, let use keep all the keys and also lets have 4 space
+            indentation.</p>
+
+        <pre>
+                const users = {
+                    Alex: {
+                      email: 'alex@alex.com',
+                      skills: ['HTML', 'CSS', 'JavaScript'],
+                      age: 20,
+                      isLoggedIn: false,
+                      points: 30
+                    },
+
+                    Asab: {
+                      email: 'asab@asab.com',
+                      skills: [
+                        'HTML',
+                        'CSS',
+                        'JavaScript',
+                        'Redux',
+                        'MongoDB',
+                        'Express',
+                        'React',
+                        'Node'
+                      ],
+                      age: 25,
+                      isLoggedIn: false,
+                      points: 50
+                    },
+                    
+                    Brook: {
+                      email: 'daniel@daniel.com',
+                      skills: ['HTML', 'CSS', 'JavaScript', 'React', 'Redux'],
+                      age: 30,
+                      isLoggedIn: true,
+                      points: 50
+                    },
+                    Daniel: {
+                      email: 'daniel@alex.com',
+                      skills: ['HTML', 'CSS', 'JavaScript', 'Python'],
+                      age: 20,
+                      isLoggedIn: false,
+                      points: 40
+                    },
+                    John: {
+                      email: 'john@john.com',
+                      skills: ['HTML', 'CSS', 'JavaScript', 'React', 'Redux', 'Node.js'],
+                      age: 20,
+                      isLoggedIn: true,
+                      points: 50
+                    },
+                    Thomas: {
+                      email: 'thomas@thomas.com',
+                      skills: ['HTML', 'CSS', 'JavaScript', 'React'],
+                      age: 20,
+                      isLoggedIn: false,
+                      points: 40
+                    },
+
+                    Paul: {
+                      email: 'paul@paul.com',
+                      skills: [
+                        'HTML',
+                        'CSS',
+                        'JavaScript',
+                        'MongoDB',
+                        'Express',
+                        'React',
+                        'Node'
+                      ],
+                      age: 20,
+                      isLoggedIn: false,
+                      points: 40
+                    }
+
+                  }
+                  
+                const txt = JSON.stringify(users, undefined, 4)
+                console.log(txt) // text means JSON-because json is a string form of an object.
+            </pre>
+    </div>
+
+    <div>
+        <h3>Using a Filter Array with JSON.stringify()</h3>
+        <p>Now, lets use the replacer as a filter. The user obj has long list of keys but we are
+            interested only in few of them. We put the keys we wanna keep in array as show in the example and use it the
+            place of the replacer.
+        </p>
+        <pre>
+                const user = {
+                    firstName: 'Datto',
+                    lastName: 'Kiyoshi',
+                    country: 'Vietnam',
+                    city: 'HCM',
+                    email: 'tiendatha2006@gmail.com',
+                    skills: ['HTML', 'CSS', 'JavaScript', 'React', 'Python'],
+                    age: 21,
+                    isLoggedIn: false,
+                    points: 30
+                }
+                
+                const txt2 = JSON.stringify(user,['firstName', 'lastName', 'country', 'city', 'age'], 4);
+                console.log(txt2);
+        </pre>
+    </div>
+
+
+    <h4>View your JSON file here:</h4>
+    <input type="file" id="fileInput" accept=".json" />
+    <pre id="fileContent"></pre>
+
+    <script>
+        document.getElementById('fileInput').addEventListener('change', (event) => {
+            const file = event.target.files[0]; // Get the selected file
+            if (file) {
+                const reader = new FileReader(); // Create a FileReader obj
+
+                reader.onload = (e) => {
+                    const content = e.target.result; // Get the file content
+                    try {
+                        const jsonData = JSON.parse(content); // Parse the JSON content
+                        document.getElementById('fileContent').textContent = JSON.stringify(jsonData, null, 2); // Display the formatted JSON
+                    } catch (error) {
+                        document.getElementById('fileContent'.textContent) = "Error parsing JSON: " + error.message; // Handle parsing errors
+                    }
+                };
+
+                reader.readAsText(file); // Read the file as text
+            }
+        });
+    </script>
+    <script src="./JSON.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+{
+    "users":[
+        {
+            "firstName":"Datto",
+            "lastName":"Kiyoshi",
+            "age":21,
+            "email":"tiendatha2006@gmail.com"
+        },
+        {
+            "firstName":"Alex",
+            "lastName":"James",
+            "age":25,
+            "email":"alex@alex.com"
+          },
+        {
+          "firstName":"Lidiya",
+          "lastName":"Tekle",
+          "age":28,
+          "email":"lidiya@lidiya.com"
+        }
+    ]
+}

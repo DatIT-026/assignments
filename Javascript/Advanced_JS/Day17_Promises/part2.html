@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>30 Days of JavaScript</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <style>
+        pre {
+            font-size: 12px;
+            font-family: Fira Code;
+        }
+
+        code {
+            padding: 2px 4px;
+            font-size: 12px;
+            font-family: Fira Code;
+            color: #c7254e;
+            background-color: #f9f2f4;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Part 2</h1>
+    <div>
+        <h2>Fetch API</h2>
+        <p><b>The Fetch API</b> provides an interface for fetching resources (including across the network).
+        It will seem familiar to anyone who has used XMLHttpRequest, but the new API provides a more powerful and flexible feature set. 
+        In this challenge, we will use fetch to request url and APIs. In addition, let us see demontrate use case of promises in accessing net work resources using the fetch API.</p>
+        <pre>
+            const url = 'https://restcountries.com/v2/all' // countries api
+            fetch(url)
+            .then(response => response.json()) // accessing the API data as JSON
+            .then(data => {
+                // getting the data
+                console.log(data)
+            })
+            .catch(error => console.error(error)) // handling error if something wrong happens
+        </pre>
+
+        <h2>Async and Await</h2>
+        <p>Asynce and await is an elegant way to handle promises. It is easy to understand and it clean to write.</p>
+        <pre>
+            const square = async function (n) {
+                return n * n
+            }  
+            square(2)
+        </pre>
+
+        <p>The word <code>async</code> in front of a function means that function will return a promise.
+        The above square function instead of a value it returns a promise.</p>
+
+        <p>How do we access the value from the promise?
+            <br> To access the value from the promise, we will use the keyword <code>await</code>.</p>
+        <pre>
+            const square = async function (n) {
+                return n * n
+              }
+            const value = await square(2)
+            console.log(value) // 4
+        </pre>
+        <p>Now, as u can see from the above exa,ple writing async in front of a function create a promise and to get the value from
+            a promise, we use <code>await</code>. Async and await go together, one can not exist without the other.
+        </p>
+        <p>Lets fetch API data using both promise method and synce and wait method.</p>
+        <li>promise</li>
+        <pre>
+            const url = 'https://restcountries.com/v2/all'
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+            })
+            .catch(error => console.error(error))
+        </pre>
+
+        <li>async and await</li>
+
+        <pre>
+            const fetchData = async () => {
+                try {
+                  const response = await fetch(url)
+                  const countries = await response.json()
+                  console.log(countries)
+                } catch (err) {
+                  console.error(err)
+                }
+              }
+            console.log('===== async and await')
+            fetchData()
+        </pre>
+    </div>
+
+
+    <button onclick="history.back()">Back</button>
+    <script src="./part2.js"></script>
+</body>
+
+</html>

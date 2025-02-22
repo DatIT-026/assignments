@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>30 Days of JavaScript</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <style>
+        pre {
+            font-size: 12px;
+            font-family: Fira Code;
+        }
+
+        code {
+            padding: 2px 4px;
+            font-size: 12px;
+            font-family: Fira Code;
+            color: #c7254e;
+            background-color: #f9f2f4;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Day 17: Promises</h1>
+
+    <div>
+        <h2>Promise</h2>
+        <p>We human give or receive a promise to do some activity at some point in time.
+            If we keep the promise we make others happy else it may lead discontentment.
+            Promise in JS has something in common with the above examples.
+        </p>
+        <p>A promise is a way to habdle asynchronous operations in JS.
+            It allows handlers with an asynchronous action's eventual success value or failure reason.
+            This lets asynchronous methods return values like synchronous methods: instead of immediately 
+            returning the final value, the asynchronous method returns a promise to supply the value at some point
+            in the future.
+        </p>
+        <p>A promise is in one of these states:</p>
+        <ul>
+            <li><b>pending:</b> initial state, neither fulfilled nor rejected.</li>
+            <li><b>fulfilled:</b> meaning that the operation completed successfully.</li>
+            <li><b>rejected:</b> meaning that the operation failed.</li>
+        </ul>
+        <p>A pending promise can either be fulfilled with a value, or rejected with a reason (error).
+            When either of these options happens, the associated handlers queued up by a promise's then method are called.
+            (<i>If the promise has already been fulfilled or rejected when a corresponding handler is attached, the handler will be called, 
+            so there is no race condition between an synchronous operation completing and its handlers being attached.</i>)
+        </p>
+        <p>As the <code>Promise.prototype.then()</code> annd <code>Promise.prototype.catch()</code> methods return promises, that can be chained.</p>
+    </div>
+
+    <div>
+        <h2>Callbacks</h2>
+        <p>To understand promise very well, lets understand callback first. Let's see the following callbacks.
+            From the following code blocks, u will notice, the difference between callback and promises.
+        </p>
+        <ul>
+            <li><b>Call back</b>: lets see a callback function which can take 2 parameters.
+                The first parameter is <code>err</code> and the second is <code>result</code>. If the <code>err</code> parameter is <b>false</b>, 
+                there will not be error otherwise it'll return an error.
+            </li>
+        </ul>
+
+        <p>In this case, the <code>err</code> has a value and it will return the <code>err</code> block.</p>
+        <pre>
+            // Callbacks
+            const doSomething = callback => {
+                setTimeout(() => {
+                    const skills = ['HTML', 'CSS', 'JS'];
+                    callback('It did not go well', skills);
+                }, 2000);
+            }
+            
+            const callback = (err, result) => {
+                if(err) return console.log(err);
+                return console.log(result);
+            }
+            
+            doSomething(callback);</pre>
+            <p>In this case the <code>err</code> is false and it will return the else block which is the result.</p>
+            <pre>
+            const doSomething = callback => {
+                setTimeout(() => {
+                  const skills = ['HTML', 'CSS', 'JS']
+                  callback(false, skills)
+                }, 2000)
+              }
+                  
+                doSomething((err, result) => {
+                if (err) {
+                  return console.log(err)
+                }
+                return console.log(result)
+              })
+            </pre>
+    </div>
+
+    <div>
+        <h2>Promise constructor</h2>
+        <p>We can create a promise using the Promise constructor. We can create a new promise using the key word <code>new</code> followed by the word <code>Promise</code>
+        and followed by a parenthesis. Inside the parenthesis, it takes a <code>callback</code> function. The promise callback function has 2 parameters which are the
+    <code>resolve</code> and <code>reject</code> functions.</p>
+
+        <pre>
+            // syntax
+            const promise = new Promise((resolve, rejetc) => {
+                resolve('success')
+                reject('failure')
+            })
+        </pre>
+        <hr style="width:50%;text-align:left;margin-left:0">
+        <pre>
+            // Promise
+            const doPromise = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                const skills = ['HTML', 'CSS', 'JS']
+                if (skills.length > 0) {
+                resolve(skills)
+                } else {
+                reject('Something wrong has happened')
+                }
+            }, 2000)
+            })
+
+            doPromise
+            .then(result => {
+                console.log(result)
+            })
+            .catch(error => console.log(error))
+        </pre>
+        <p>The above promise has been settled with resolve. Lets see another example when the promise is settled with reject.</p>
+        <pre>
+            // Promise
+            const doPromise = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                const skills = ['HTML', 'CSS', 'JS']
+                if (skills.includes('Node')) {
+                resolve('fullstack developer')
+                } else {
+                reject('Something wrong has happened')
+                }
+            }, 2000)
+            })
+
+            doPromise
+            .then(result => {
+                console.log(result)
+            })
+            .catch(error => console.error(error))
+        </pre>
+    </div>
+
+    <button onclick="window.location.href='part2.html'">Next ></button>
+    <script src="./part1.js"></script>
+</body>
+
+</html>

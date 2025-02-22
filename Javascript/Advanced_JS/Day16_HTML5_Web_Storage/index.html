@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>30 Days of JavaScript</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <style>
+        pre {
+            font-size: 12px;
+            font-family: Fira Code;
+        }
+        code {
+            padding: 2px 4px;
+            font-size: 12px;
+            font-family: Fira Code;
+            color: #c7254e;
+            background-color: #f9f2f4;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Day 16: HTML5 Web Storage</h1>
+    <p><b>Web Storage</b> (<i>sessionStorage</i> and <i>localStorage</i>) is a new HTML5 API offering important benefits over traditional cookies.
+    Before HTML5, application data had to be stored in <a href="https://en.wikipedia.org/wiki/HTTP_cookie">cookies</a>, included in every request.</p>
+    <p>Web storage is more secure, and large amounts of data can be stored locally, without affecting website performance.
+    The data storage limit of cookies in many web browsers is about 4 KB per cookie.</p>
+    <p>Web Storages can store far larger data (at least 5MB) and never transferred to the server.
+        All sites from the same or one origin can store and access the same data.
+    </p>
+    <ul>
+        <li>sesstionStorage</li>
+        <li>localStorage</li>
+    </ul>
+
+    <p><b>localStorage</b> is similar to sessionStorage, except that while data stored in localStorafe has <b>no expiration time</b>,
+        data stored in sessionStorage gets cleared when the page session ends - that is, when the page is closed.</p>
+    <p>It should be noted that data stored in either localStorage or sessionStorage is specific to the protocol of the page.</p>
+    <p><b>The keys and the values are always strings</b> (note that, as with objects, integer keys will be automatically converted to strings).</p>
+
+    <img src="./web_storage.png" alt="Web Storage" style="width: 650px; height: auto"/>
+
+    <h3>sessionStorage</h3>
+    <p>sessionStorage is only available within the browser tab or window session.
+        It's designed to store data in a single web page session. That means if 
+        the window is closed the session data will be removed. Since sessionStorage 
+        and localStorage has similar methods, we'll focus only on localStorage.
+    </p>
+
+    <h3>localStorage</h3>
+    <p>
+        The HTML5 localStorage is the para of the web storage API which is used to store data on the browser with no expiration data.
+        The data will be available on the browser even after the browser is closed.</p> 
+        <p><code>localStorage</code> is kept even between browser sessions.
+        This means data is still available when the browser is closed and re-opened, and also instantly between tabs and windows.
+    </p>
+    <p>
+        Web Storage data is, in both cases, not available between different browsers.
+        For example, storage objects created in Firefox cannot be accessed in Internet Explorer, exactly like cookies. There are five methods to work on local storage:
+        <code>setItem(), getItem(), removeItem(), clear(), key()</code>
+    </p>
+
+    <h3>Use case of Web Storages</h3>
+    <p>Some use case of Web Storages are</p>
+    <li>store data temporarily</li>
+    <li>saving products that the user places in his shopping cart.</li>
+    <li>data can be made available between page requests, multiple browser tabs, and also between browser sessions using localStorage.</li>
+    <li>can be used offline completely using localStorage.</li>
+    <li>Web Storage can be a great performance win when some static data is stored on the client to minimize the number fo subsequent requests.
+        Even images can be stored in strings using Base64 encoding.
+    </li>
+    <li>can be used for user authentication method.</li>
+
+    <p>For the examples mentioned above, it makes sense to use localStorage. You maybe wondering, then, when we should use sessionStorage.</p>
+
+    <p>
+        In cases, we wanna to get rid of the data as soon as the window is closed. Or, perhaps if we do not want the application to interfere with the same application that's open in another window.
+        These scenarios are served best with sessionStorage.
+    </p>
+
+    <p>Now, lets see how make use of these Web Storage APIs.</p>
+
+    <h3>HTML5 Web Storage Objects</h3>
+    <p>HTML web storage provides two objects for storing data on the client:</p>
+    <li><code>window.localStorage</code> - stores data with <b>no expiration date</b>.</li>
+    <li><code>window.sessionStorage</code> - stores data <b>for one session</b> (data is lost when the browser tab is closed).
+    Most modern browsers support Web Storage, however it is good to check browser support for localStorage and sessionStorage. Lets see the available methods for the Web Storage objects.</li>
+
+    <h4>Web Storage objects</h4>
+    <ul>
+        <li><code>localStorage</code> 
+            - to display the localStorage object.</li>
+        <li><code>localStorage.clear()</code> 
+            - to remove everything in the local storage.</li>
+        <li><code>localStorage.setItem()</code> 
+            - to store data in the localStorage. It takes a key and a value parameters.</li>
+        <li><code>localStorage.removeItem()</code>
+            - to remove stored item form a localStorage. It takes key as a parameter.</li>
+        <li><code>localStorage.key()</code> 
+            - to display a data stored in a localStorage. It takes index as a parameter.</li>
+            <img src="./local_storage.png" alt="Local Storage" style="width: 650px; height: auto"/>
+    </ul>
+
+    <div>
+        <h3>Setting item to the localStorage</h3>
+        <p>When we set data to be stored in a localStorage, it will be stored as a string. If we are storing an array or an object,
+            we should stringify it first to keep the format unless otherwise we lose the array structure or the object structure of the
+            original data.
+        </p>
+        <p>We store data in the localStorage using the <code>localStorage.setItem</code> method.</p>
+        <pre>
+            // syntax
+            localStorage.setItem('key', 'value'); </pre>
+        <li>Storing string in a localStorage</li>
+        <pre>
+            localStorage.setItem('firstName', 'Datto'); // since the value is string we do not stringify it
+            console.log(localStorage); </pre>
+        <li>Storing number in a local storage</li>
+        <pre>
+            localStorage.setItem('age', 200);
+            console.log(localStorage); </pre>
+        <li>Storing an array in a localStorage. If we are storing an array, an obj or obj array, we should stringify the obj first.</li>
+        <pre>
+            const skills = ['HTML', 'CSS', 'JS', 'React'];
+
+            // Skills array has to be stringified first to keep the format.
+            const skillsJSON = JSON.stringify(skills, undefined, 4);
+            localStorage.setItem('skills, skillsJSON');
+            console.log(localStorage);
+        </pre>
+        <li>Storing an obj in a localStorage. Before we storage objects to a localStorage, the obj has to be stringified.</li>
+        <pre>
+            const user = {
+                firstName: 'Datto',
+                age: 21,
+                skills: ['HTML', 'CSS', 'JS', 'React']
+            }
+
+            const userText = JSON.stringify(user, undefined, 4);
+            localStorage.setItem('user', userText); </pre>
+    </div>
+
+    <div>
+        <h3>Getting item from localStorage</h3>
+        <p>We get data from the local storage using <code>localStorage.getItem()</code> method.</p>
+        <pre>
+            // syntax
+            localStorage.getItem('key'); </pre>
+
+        <pre>
+            let firstName = localStorage.getItem('firstName');
+            let age = localStorage.getItem('age');
+            let skills = localStorage.getItem('skills');
+            console.log(firstName, age, skills); </pre>
+        <p>As u can see, the skill is in a string format. Lets use <code>JSON.parse()</code> to parse it to normal array.</p>
+        <pre>
+            let skills = localStorage.getItem('skills');
+            let skillsObj = JSON.parse(skills, undefined, 4);
+            console.log(skillsObj);
+        </pre>
+
+        <h3>Clearing the localStorage</h3>
+        <p>The clear method, will clear everything stored in the local storage.</p>
+        <code>localStorage.clear()</code>
+    </div>
+
+    <script src="./webStorage.js"></script>
+</body>
+
+</html>
