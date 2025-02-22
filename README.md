@@ -2,7 +2,8 @@
 This is my assignment workspace.
 
 ## How to use?
-Clone this repo if you want to use or modify it
+Clone this repo if you want to use or modify it:
+
 <code>git clone https://github.com/DatIT-026/assignments.git</code>
 
 **CSI106**: using [Typst](https://typst.app/) to modify the .pdf file.
