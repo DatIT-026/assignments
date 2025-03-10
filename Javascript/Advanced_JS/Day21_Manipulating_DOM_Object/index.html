@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>30 Days of JavaScript</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <style>
+        pre {
+            font-size: 12px;
+            font-family: Fira Code;
+        }
+
+        code {
+            padding: 2px 4px;
+            font-size: 12px;
+            font-family: Fira Code;
+            color: #c7254e;
+            background-color: #f9f2f4;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Day 21: Manipulating DOM Object</h1>
+
+    <!-- Creating an Element -->
+    <script>
+        let title = document.createElement('h1');
+        title.className = 'title'
+        title.style.fontSize = '24px'
+        title.textContent = 'Creating HTML element DOM day 2'
+
+        console.log(title);
+    </script>
+
+    <!-- Creating elements -->
+     <script>
+        let titles;
+        for(let i = 0; i < 3; i++) {
+            titles = document.createElement('h1');
+            titles.className = 'titles';
+            titles.style.fontSize = '24px';
+            titles.textContent = i;
+            console.log(titles);
+        }
+     </script>
+
+     <!--Appending child to a parent element -->
+    <script>
+        let titles_1;
+        for(let i = 0; i < 3; i++) {
+            titles_1 = document.createElement('h1');
+            titles_1.className = 'titles_1';
+            titles_1.style.fontSize = '24px';
+            titles_1.textContent = i;
+            document.body.appendChild(titles_1)
+        }
+    </script>
+
+    <!-- Removing a child element from a parent node -->
+
+    <h1> Removing child Node</h1>
+    <h2>Fox you, JavaScript</h2>
+    <ul>
+        <li>30DaysOfJavaScript Challenge Done</li>
+        <li>30DaysOfCpp Challenge Done</li>
+        <li>30DaysOfReact Challenge Coming</li>
+        <li>30DaysOfFullStack Challenge Coming</li>
+    </ul>
+    
+    <!-- removeChild() method -->
+    <script>
+        const ul = document.querySelector('ul');
+        const lists = document.querySelectorAll('li');
+        for (const list of lists) {
+            ul.removeChild(list);
+        }
+    </script>
+
+    <!-- innerHTML method -->
+     <script>
+        const h2 = document.querySelector('h2');
+        h2.innerHTML = '';
+     </script>
+</body>
+
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Document Object Model</title>
+</head>
+
+<body>
+    <div class="wrapper">
+        <h1>Challenges in 2025</h1>
+        <h2>30DaysOfJavaScript Challenges</h2>
+        
+        <ul></ul>
+    </div>
+
+    <!-- Adding Text to HTML element -->
+    <script>
+        const lists = `
+        <li>30DaysOfJS Challenge Done</li>
+        <li>30DaysOfReact Challenge Coming</li>
+        <li>30DaysOfFullStack Challenge Coming</li>
+        <li>30DaysOfDataAnalysis Challenge Coming</li>
+        `
+        const ul = document.querySelector('ul');
+        ul.innerHTML = lists;
+
+        console.log('-------------------');
+    </script>
+
+    <!-- Adding style -->
+    <script>
+        // Adding Style Color
+        const titles = document.querySelectorAll('h1');
+        titles.forEach((title, i) => {
+            title.style.fontSize = '24px'; // all titles will have 24px font size
+            if(i % 2 === 0) title.style.color = 'red';
+                else title.style.color = 'green';
+        })
+
+        // Adding Style Background Color
+        const titles_2 = document.querySelectorAll('h1');
+        titles_2.forEach((title2, i) => {
+            title2.style.fontSize = '24px'; // all titles will have 24px font size
+            if(i % 2 === 0) title2.style.backgroundColor = 'green';
+                else title2.style.backgroundColor = 'red';
+        })
+
+        console.log('-------------------');
+    </script>
+
+</body>
+</html>

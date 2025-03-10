@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Number Generator</title>
+    <style>
+        h1 {
+            margin: auto;
+            text-align: center;
+            align-items: center;
+        }
+
+        .InPut {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .wrapper,
+        .wrapper2 {
+            display: grid;
+            grid-template-columns :repeat(10, 0fr);
+            justify-content: center;
+            gap: 5px;
+            margin-top: 1rem;
+        }
+
+        .box {
+            width: 60px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Number Generator</h1>
+   <div class="InPut">
+        <input type="number" id="numInput" placeholder="Generate more number" />
+        <button id="btnGenerate">Generate numbers</button>
+   </div>
+    <div class="wrapper"></div>
+
+    <h1>Keyboard Code</h1>
+    <p style="text-align: center;">Click any key on your keyboard</p>
+    <div class="InPut">
+        <button class="btnDet">Click me to clear the memory</button>
+    </div>
+    <div class="wrapper2"></div>
+
+
+    <script src="./proj1.js"></script>
+    <script src="./proj1_1.js"></script>
+</body>
+</html>

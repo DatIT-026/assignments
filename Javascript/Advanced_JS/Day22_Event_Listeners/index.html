@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>30 Days of JavaScript</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <style>
+        pre {
+            font-size: 12px;
+            font-family: Fira Code;
+        }
+
+        code {
+            padding: 2px 4px;
+            font-size: 12px;
+            font-family: Fira Code;
+            color: #c7254e;
+            background-color: #f9f2f4;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Day 22: Event Listeners</h1>
+
+<!--    List of events:
+
+        click - when the element clicked
+        dblclick - when the element double clicked
+        mouseenter - when the mouse point enter to the element
+        mouseleave - when the mouse pointer leave the element
+        mousemove - when the mouse pointer move on the element
+        mouseover - when the mouse pointer move on the element
+        mouseout - when the mouse pointer out from the element
+        input - when value enter to input field
+        change - when value change on input field
+        blur - when the element is not focused
+        keydown - when a key is down
+        keyup - when a key is up
+        keypress - when we press any key
+        onload - when the browser has finished loading a page
+
+-->
+
+    <!-- Click -->
+    <button>This is a button</button>
+
+    <script>
+        const button = document.querySelector('button');
+        button.addEventListener('click', e => {
+            console.log('e gives the event listener object:', e);
+            console.log('e.target gives the selected element:', e.target);
+            console.log('e.target.textContent gives content of selected element:', e.target.textContent);
+        })
+    </script>
+
+    <!-- onclick -->
+    <button onclick="clickMe()">Click Me</button>
+
+    <script>
+        const clickMe = () => {
+            alert('We can attach event on HTML element');
+        }
+    </script>
+
+    <!-- Double Click -->
+    <button>Click Me 2</button>
+
+    <script>
+        const button2 = document.querySelector('button');
+        button2.addEventListener('dblclick', event => {
+            console.log('event gives the event listener object:', event);
+            console.log('event.target gives theh selected element:', event.target);
+            console.log('event.target.textContent gives content of selected element:', event.target.textContent);
+        })
+    </script>
+
+    <!-- Mouse enter -->
+     <button>Click me 3</button>
+     
+     <script>
+        const button3 = document.querySelector('button');
+        button3.addEventListener('mouseenter', event => {
+            console.log('event gives the event listener object:', event);
+            console.log('event.target gives theh selected element:', event.target);
+            console.log('event.target.textContent gives content of selected element:', event.target.textContent);
+        })
+     </script>
+
+     <!-- Getting value from an input element -->
+      <h2>Body Mass Index Calculator</h2>
+      
+      <input type="text" id="mass" placeholder="Mass in Kilogram" />
+      <input type="text" id="height" placeholder="Height in meters" />
+      <button id="calBtn">Calculate BMI</button>
+
+      <script>
+        const mass = document.querySelector('#mass');
+        const height = document.querySelector('#height');
+        const button4 = document.querySelector('#calBtn');
+
+        let bmi = 0;
+        button4.addEventListener('click', () => {
+            bmi = mass.value / height.value ** 2;
+            alert(`Your BMI is ${bmi.toFixed(2)}`);
+            console.log(bmi);
+        })
+      </script>
+
+<br />
+<hr>
+<br />
+<button onclick="window.location.href='./Input_event_and_change.html'">Input_event_and_change ></button>
+
+<button onclick="window.location.href='./blur_event.html'">blur_event ></button>
+
+<button onclick="window.location.href='./keypress_keydow_keyup.html'">keypress_keydow_keyup ></button>
+</body>
+
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Document Object Model: 30 Days Of JavaScript</title>
+</head>
+
+<body>
+  <h1>Key events: Press any key</h1>
+
+  <script>
+    document.body.addEventListener('keypress', e => {
+      alert(e.keyCode)
+    })
+  </script>
+
+  <button onclick="history.back()">Back</button>
+</body>
+
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Document Object Model</title>
+</head>
+
+<body>
+    
+    <h1 class="title" id="first-title">First Title</h1>
+    <h1 class="title" id="second-title">Second Title</h1>
+    <h1 class="title" id="third-title">Third Title</h1>
+
+    <!-- Adding attribute -->
+    <script>
+        // Adding attribute without setAttribute
+        const titles = document.querySelectorAll('h1');
+        titles[1].className = 'title';
+        titles[1].id = 'fourth-title';
+
+        // Adding attribute using setAttribute
+        const titles_1 = document.querySelectorAll('h1');
+        titles_1[2].setAttribute('class', 'title');
+        titles_1[2].setAttribute('id', 'fifth-title');
+
+        // another way to setting an attribute: append the class, doesn't over ride
+        titles[0].classList.add('title', 'header-title');
+        titles[0].classList.remove('title', 'header-title');
+
+        console.log('-------------------');
+    </script>
+
+</body>
+</html>

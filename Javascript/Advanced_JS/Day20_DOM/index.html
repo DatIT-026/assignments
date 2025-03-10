@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>30 Days of JavaScript</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <style>
+        pre {
+            font-size: 12px;
+            font-family: Fira Code;
+        }
+
+        code {
+            padding: 2px 4px;
+            font-size: 12px;
+            font-family: Fira Code;
+            color: #c7254e;
+            background-color: #f9f2f4;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Day 20: Document Object Model (DOM)</h1>
+
+    <p>
+        HTML document is structured as a JS Object. Every HTML element has a different properties which can help to manipulate it.
+        It is possible to get, create, append or remove HTML elements using JS. Check the examples below.
+    </p>
+    <p>
+        Selecting HTML element using JS is similar to selecting using CSS. To select an HTML element, we use tag name, id, class name
+        or other attributes.
+    </p>
+
+    <div>
+        <h2>Getting Element</h2>
+        <p>
+            We can access already created element or elements using JS. To access or get elements we use different methods.
+            The code below has 4 <code>h1</code> elements. Let us see the different methods to access the <code>h1</code> elements.
+        </p>
+
+        <img src="./1.png" alt="Getting Element" style="width: 550px; height: auto" />
+
+        <h3>Getting elements by tag name</h3>
+        <p>
+            <code>getElementsByTagName()</code> takes a tag name as a string parameter and this method returns as HTMLCollection object.
+        </p>
+        <p>
+            An HTMLCollection is an array like object of HTML elements. The length property provides the size of the collection. Whenever
+            we use this method, we access the individual elements using index or after loop through each individual items.
+        </p>
+        <p>
+            An HTMLCollection does not support all array methods therefore we should use regular for loop instead of forEach.
+        </p>
+
+        <pre>
+            // syntax
+            document.getElementsByTagName('tagname'); </pre>
+        
+        <p style="font-family: Fira Code;">-------------------------</p>
+        
+        <pre>
+            const allTitles = document.getElementsByTagName('h1')
+            console.log(allTitles) //HTML Collections
+            console.log(allTitles.length) // 4
+
+            for(let i = 0; i < allTitles.length; i++) {
+                console.log(allTitles[i]); //prints each elements in the HTMLCollection
+            } </pre>
+
+        <h3>Getting elements by class name</h3>
+        <p>
+            <code>getElementsByClassName()</code> method returns an HTMLCollection object. An HTMLCollection is an array like list of HTML elements.
+            The length property provides the size of the collection. It is possible to loop through all the HTMLCollection elements. See the example below.
+        </p>
+
+        <pre>
+            // syntax
+            document.getElementByClassName('classmate'); </pre>
+
+        <p style="font-family: Fira Code;">-------------------------</p>
+
+        <pre>
+            const allTitles = document.getElementsByClassName('title');
+            console.log(allTitles); // HTMLCollections
+            console.log(allTItles.length); // 4
+
+            for(let i = 0; i < allTitles.length; i++) {
+                console.log(allTitles[i]); // prints each elements in the HTMLCollection
+            } </pre>
+
+        <h3>Getting an element by id</h3>
+        <p><code>getElementById()</code> targets a single HTML element. We pass the id without # as an argument.</p>
+        <pre>
+            // syntax
+            document.getElementById('id'); </pre>
+        <pre>
+            let firstTitle = document.getElementById('first-title')
+            console.log(firstTitle); // &lt;h1&gt;First Title&lt;/h1&gt;
+        </pre>
+
+        <h3>Getting an element by querySeletor methods</h3>
+        <p>The <code>document.querySeletor</code> moethod can select an HTML or HTML elements by tag name, by id or by class name.</p>
+        <p><code>querySeletor</code> can be used to select HTML element by its tag name, id or class. If the tag name is used it selects only the first element.</p>
+
+        <pre>
+            let firstTitle = document.querySelector('h1'); // select the first available h1 element
+            let firstTitle = document.querySelector('#first-title'); // select id with first-title
+            let firstTitle = document.querySelector('.title'); // select the first available element with class title
+        </pre>
+        
+        <p>
+            <code>querySelectorAll</code> can be used to select html elements by its tag name or class.
+            It returns a nodeList which is an array like object which supports array methods. We can use 
+            <i>for loop</i> or <i>forEach</i> to loop through each nodeList elements.
+        </p>
+        <pre>
+            const allTitles = document.querySelectorAll('h1') # selects all the available h1 elements in the page
+
+            console.log(allTitles.length) // 4
+            for (let i = 0; i < allTitles.length; i++) {
+            console.log(allTitles[i])
+            }
+
+            allTitles.forEach(title => console.log(title))
+            const allTitles = document.querySelectorAll('.title') // the same goes for selecting using class </pre>
+    </div>
+
+    <div>
+        <h2>Adding attribute</h2>
+        <p>
+            An attribute is added in the opening tag of HTML which gives additional information about the element.
+            Common HTML attributes: id, class, src, style, href, disabled, title, alt. Lets add id and class for the
+            fourth title.
+        </p>
+        <pre>
+            const titles = document.querySelectorAll('h1')
+            titles[3].className = 'title'
+            titles[3].id = 'fourth-title' </pre>
+
+        <h3>Adding attribute using setAttribute</h3>
+        <p>
+            The <code>setAttribute()</code> method set any html attribute. It takes two parameters the type of the attribute
+            and the name of the attribute. Let's add class and id attribute for the fourth title.
+        </p>
+        <pre>
+            const titles = document.querySelectorAll('h1');
+            title[3].setAttribute('class', 'title');
+            title[3].setAttribute('id', 'fourth-title'); </pre>
+
+        <h3>Adding attribute without setAttribute</h3>
+        <p>
+            We can use normal obj setting method to set an attribute but this can not work for all elements.
+            Some attributes are DOM obj property and they can be set directly. For instance id and class.
+        </p>
+        <pre>
+            // another way to setting an attribute
+            title[3].className = 'title'
+            titles[3].id = 'fourth-title' </pre>
+        
+        <h3>Adding class using classList</h3>
+        <p>
+            The class list method is a good method to append additional class.
+            It does not override the original class if a class exists rather it adds additional
+            class for the element.
+        </p>
+        <pre>
+            // another way to setting an attribute: append the class, doesn't over ride
+            titles[3].classList.add('title', 'header-title'); </pre>
+
+        <h3>Removing class using remove</h3>
+        <p>Similar to adding we can also remove class from an element. We can remove a specific class from an element.</p>
+        <pre>
+            // another way to setting an attribute: append the class, doesn't over ride
+            titles[3].classList.remove('title', 'header-title'); </pre>
+    </div>
+
+    <div>
+        <h2>Adding Text to HTML element</h2>
+        <p>
+            An HTML is a build block of an opening tag, a closing tag and a text content.
+            We can add a text content using the property <i>textContent</i> or <i>innerHTML</i>.
+        </p>
+
+        <h3>Adding Text content using textContent</h3>
+        <p>The <code>textContent</code> property is used to add text to an HTML element.</p>
+        <pre>
+            const titles = document.querySelectorAll('h1');
+            titles[3].textContent = 'Fourth Title'; </pre>
+
+        <h3>Adding Text Content using innerHTML</h3>
+        <p>
+            Most people get confused between <code>textContent</code> and <code>innderHTML</code>.
+            <code>textContent</code> is meant to add text to an HTML element, however innerHTML can
+            add a text or HTML element or elements as a child.
+        </p>
+
+        <h4>Text Content</h4>
+        <p>We assign <code>textContent</code> object property to a text</p>
+        <pre>
+            const titles = document.querySelectorAll('h1');
+            titles[3].textContent = 'Fourth Title';
+        </pre>
+        
+        <h4>Inner HTML</h4>
+        <p>
+            We use <code>innerHTML</code> property when we like to replace or a completely new children content to a parent element.
+            I value we assign is goin' to be a string of HTML elements.
+        </p>
+        <img src="./2.png" alt="Inner HTML" style="width: 500px; height: auto" />
+        <p>
+            The <code>innerHTML</code> property can allow us also to remove all the children of a parent element.
+            Instead of using <code>removeChild()</code>. I'd recommend the following method.
+        </p>
+        <img src="./3.png" alt="Inner_HTML_2" style="width: 500px; height: auto" />
+    </div>
+    
+    <div>
+        <h2>Adding style</h2>
+
+        <h3>Adding Style Color</h3>
+        <p>Let us add some style to our titles. If the element has even index we give it green color else red.</p>
+        <pre>
+            const titles = document.querySelectorAll('h1');
+            titles.forEach((title, i) => {
+                title.style.fontSize = '24px' // all titles will have 24px font size
+                if(i % 2 === 0) title.style.color = 'green';
+                    else title.style.color = 'red';
+            }) </pre>
+
+        <h3>Adding Style Background Color</h3>
+        <p>Let us add some style to our titles. If the element has even index we give it green colro else red.</p>
+        <pre>
+            const titles = document.querySelectorAll('h1')
+            titles.forEach((title, i) => {
+                title.style.fontSize = '24px' // all titles will have 24px font size
+                if (i % 2 === 0) title.style.backgroundColor = 'green'
+                    else title.style.backgroundColor = 'red'
+            }) </pre>
+
+        <h3>Adding Style Font Size</h3>
+        <p>Let us add some style to our titles. If the element has even index we give it 20px else 30px.</p>
+        <pre>
+            const titles = document.querySelectorAll('h1')
+            titles.forEach((title, i) => {
+                title.style.fontSize = '24px' // all titles will have 24px font size
+                if (i % 2 === 0) title.style.fontSize = '20px'
+                    else title.style.fontSize = '30px'
+            }) </pre>
+        <p>
+            As you hace notice, the properties of CSS when we use it in JS is goin' to be camelCase.
+            The following CSS properties change from background-color to backgroundColor, font-size to fontSize,
+            font-family to fontFamily, margin-bottom to marginBottom.
+        </p>
+    </div>
+</body>
+
+</html>
