@@ -1,0 +1,271 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Vietnamese cuisine</title>
+
+	<!--Embed CSS here-->
+	<link href="CSS/styleindex.css" rel="stylesheet">
+
+</head>
+
+
+<body>
+
+	<div> <!--div contains all the web page content-->
+
+		<div class="header-container"> <!--div contains header content-->
+
+			<div>
+				<a href="index.html"><img src="images/Logo.PNG" class="header-img"></a>
+			</div>
+
+			<div class="header-search">
+
+				<form>
+					<input type="text" placeholder="Search in website">
+					<button type="submit">Search</button>
+				</form>
+
+			</div>
+
+		</div> <!-- finish div contains header content-->
+
+		<!--------------------------------------------------------------------------------------------------------------->
+
+		<div class="header-menu"> <!--div contains menu content-->
+
+			<ul>
+				<li><a href="#">Home</a></li>
+				<li><a href="#">About</a></li>
+				<li><a href="#">Services</a></li>
+				<li><a href="#">Menu</a></li>
+				<li><a href="#">Events</a></li>
+				<li><a href="#">Contact</a></li>
+			</ul>
+
+		</div> <!-- finish div contains menu content-->
+
+		<!--------------------------------------------------------------------------------------------------------------->
+
+		<div class="banner"> <!--div contains banner and  Your registration information content-->
+
+			<div> <!--div contains banner content-->
+				<img src="images/nhahang.png" alt="Vietnamese cuisine" class="banner-img" />
+			</div> <!--finish div contains banner content-->
+
+			<div class="right-banner"> <!--div contains Your registration information content-->
+
+				<h2>Your registration information</h2>
+
+				<form action="#" method="post">
+
+					<div class="right-banner-info">
+						<label for="fname">First Name</label>
+						<input type="text" id="fname" name="firstname" placeholder="Your name.." />
+					</div>
+
+					<div class="right-banner-info">
+						<label for="lname">Last Name</label>
+						<input type="text" id="lname" name="lastname" placeholder="Your last name.." />
+					</div>
+
+					<div class="right-banner-info">
+						<label for="phone"> Yuor Phone</label>
+						<input type="text" id="phone" name="phone" placeholder="Your phone number.." />
+					</div>
+
+					<div class="right-banner-info-btn">
+						<input type="submit" value="Send" />
+					</div>
+
+
+				</form>
+
+			</div> <!-- finish div contains Your registration information content-->
+
+		</div> <!-- Finish div contains banner and  Your registration information content-->
+
+		<!--------------------------------------------------------------------------------------------------------------->
+
+		<div> <!--div contains LIST OF DISHES content-->
+
+			<h1 class="title">LIST OF DISHES</h1>
+
+			<div class="dishes-container">
+
+				<div class="dishes-row-1">
+
+					<div class="dishes-row-1-1">
+
+						<img src="images/goitom.jpg" alt="Bamboo shoot, shrimp and meat salad" />
+
+						<div class="temp">
+
+							<h3>Bamboo shoot, shrimp and meat salad</h3>
+							<h3>Price : $10</h3>
+
+							<div>
+								<button id="btn1">Add to Cart</button>
+							</div>
+
+						</div>
+
+					</div>
+
+					<div class="dishes-row-1-2">
+
+						<img src="images/Nemranchagio.jpg" alt="Fried spring rolls" />
+
+						<div class="temp">
+
+							<h3>Fried spring rolls</h3>
+							<h3>Price : $8</h3>
+
+							<div>
+								<button id="btn2">Add to Cart</button>
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+
+				<div class="dishes-row-2">
+
+					<div class="dishes-row-2-1">
+
+						<img src="images/Canhga.jpg" alt="Grilled chicken wings with salt and chili" />
+
+						<div class="temp">
+
+							<h3>Grilled chicken wings with salt and chili</h3>
+							<h3>Price : $14</h3>
+
+							<div>
+								<button id="btn3">Add to Cart</button>
+							</div>
+
+						</div>
+
+					</div>
+
+					<div class="dishes-row-2-2">
+
+						<img src="images/Lathaichuacay.jpg" alt="Thai hot and sour hot pot" />
+
+						<div class="temp">
+
+							<h3>Thai hot and sour hot pot</h3>
+							<h3>Price : $25</h3>
+
+							<div>
+								<button id="btn4">Add to Cart</button>
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<div style="clear: both ;"> </div>
+
+		</div> <!--div contains LIST OF DISHES content-->
+
+
+		<!------------------------------------------------------------------------------------------------------------------->
+
+		<div class="cart"> <!--div contains cart content-->
+
+			<h2>Your Cart</h2>
+
+			<div>
+
+				<ul id="myList">
+					<p>Your cart is empty.</p>
+				</ul>
+
+				<h3>Total: $0</h3>
+
+			</div>
+
+		</div> <!-- finish div contains cart content-->
+
+		<ul id="myList"></ul>
+
+		<!------------------------------------------------------------------------------------------------------------------->
+
+		<div class="footer"> <!--div contains footer content-->
+
+			<p>Email : Vietnamesecuisine@gmail.com</p>
+			<p>Address: 100 Phan Van Tri, Binh Thanh District, HCMC</p>
+			<h5>&copy; Copyright 2025. Vietnamesecuisine.com</h5>
+
+		</div> <!-- finish div contains footer content-->
+
+	</div> <!--finish div contains all the web page content-->
+
+	<!------------------------------------------------------------------------------------------------------------------->
+
+	<script>
+		//Write your Javascript code here
+			// Create a list of fruits
+			const btnn1 = ["• Bamboo shoot, shrimp and meat salad - $10"];
+			const btnn2 = ["• Fried spring rolls - $8"];
+			const btnn3 = ["• Grilled chicken wings with salt and chili - $14"];
+			const btnn4 = ["• Thai hot and sour hot pot - $25"];
+
+			// Get the button element
+			const addItem1 = document.getElementById('btn1');
+				addItem1.addEventListener('click', () => {
+					btnn1.forEach(btn => {
+					const listItem = document.createElement('p');
+					listItem.textContent = btn;
+					myList.appendChild(listItem);
+				})
+			})
+
+			// Get the button element
+			const addItem2 = document.getElementById('btn2');
+				addItem2.addEventListener('click', () => {
+					btnn2.forEach(btn => {
+					const listItem = document.createElement('p');
+					listItem.textContent = btn;
+					myList.appendChild(listItem);
+				})
+			})
+
+			// Get the button element
+			const addItem3 = document.getElementById('btn3');
+				addItem3.addEventListener('click', () => {
+					btnn3.forEach(btn => {
+					const listItem = document.createElement('p');
+					listItem.textContent = btn;
+					myList.appendChild(listItem);
+				})
+			})
+
+			// Get the button element
+			const addItem4 = document.getElementById('btn4');
+				addItem4.addEventListener('click', () => {
+					btnn4.forEach(btn => {
+					const listItem = document.createElement('p');
+					listItem.textContent = btn;
+					myList.appendChild(listItem);
+				})
+			})
+
+			const myList = document.getElementById('myList');
+			
+
+	</script>
+
+
+</body>
+
+</html>

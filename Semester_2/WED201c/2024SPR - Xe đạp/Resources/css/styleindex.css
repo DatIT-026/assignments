@@ -1,0 +1,159 @@
+body {
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    background-color: #CFCFCF;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.header-menu {
+    display: flex;
+    gap: 20px;
+}
+
+.header-menu li {
+    display: inline;
+    margin: 15px;
+}
+
+.header-menu a {
+    text-decoration: none;
+    color: whitesmoke;
+    font-weight: bold;
+}
+
+.header-img {
+    width: 150px;
+    height: 100px;
+    align-items: center;
+    padding: 10px 450px 5px 0;
+}
+
+.header-search {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-search input {
+    padding: 5px;
+    color: white;
+}
+
+.header-search button {
+    border: none;
+    background-color:#DF732A;
+    padding: 5px 2px;
+    color: white;
+    font-weight: bold;
+}
+
+.banner {
+    width: 100%;
+    height: 30em;
+}
+
+.content-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 0px 0 0px;
+    gap: 15px;
+}
+
+.content-obj {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    width: 290px;
+    padding: 15px;
+    gap: 7px;
+}
+
+.content-obj p {
+    color: #DF732A;
+}
+
+.content-obj-img {
+    width: 5vw;
+}
+
+.title h1 {
+    text-align: center;
+    color: aliceblue;
+    padding: 10px 0 10px 0;
+}
+
+.content-product {
+    display: flex;
+    justify-content: center;
+    gap: 4em;
+}
+
+.content-product-img {
+    width: 600px;
+    height: 557px;
+}
+
+.content-product-info h2 {
+    color: blue;
+}
+
+.content-product-info p {
+    color: aliceblue;
+}
+
+.content-product-info-obj {
+    display: flex;
+    align-items: center;
+    padding-left: 80px;
+}
+
+.content-product-info-obj-img {
+    width: 220px;
+    height: 267px;
+    padding: 0 5px 0 5px;
+}
+
+.accessories-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.accessories-product {
+    border: 2px solid #000000;
+    width: 20%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.accessories-product img {
+    padding: 15px;
+    width: 90%;
+    height: 320px;
+}
+
+.accessories-product div {
+    text-align: center;
+    background-color: #DF732A;
+    padding: 7px;
+    color: antiquewhite;
+}
+
+.footer {
+    margin-top: 20px;
+    background-color: #4FA3FD;
+    padding: 5px;
+}
+
+.footer p, h5 {
+    display: flex;
+    justify-content: center;
+    color: aliceblue;
+}
