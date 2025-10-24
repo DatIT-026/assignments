@@ -1,0 +1,19 @@
+1.Danh sách khách hàng có tổng giá trị hóa đơn lớn hơn 50 triệu, gồm: 
+	MaKH, HoTenKH,TongGTHD.
+2.Tìm hóa đơn có chứa sản phẩm được sản xuất tại Việt Nam: Hiển thị số hóa đơn, mã khách hàng, và tổng trị giá của hóa đơn.
+	SoHD, MaKH, TongGTHD
+3.Danh sách nhân viên đã xử lý hơn 5 hóa đơn: Hiển thị mã nhân viên, họ tên nhân viên, và số lượng hóa đơn đã xử lý. 
+	MaNV, HoTenNV,SLHD
+4.Thông tin chi tiết các hóa đơn có giá trị cao nhất: Hiển thị số hóa đơn, mã khách hàng, mã nhân viên, ngày hóa đơn, và trị giá của hóa đơn (SoHD, MaKH, MaNV, NgayHD, TriGia)
+5.Sản phẩm được mua với số lượng nhiều nhất trên tất cả hóa đơn: Hiển thị mã sản phẩm, tên sản phẩm, và tổng số lượng đã bán.
+	MaSP, TenSP, TongSLBan
+6.Danh sách khách hàng sinh trước năm 2001: Hiển thị mã khách hàng, họ tên, và ngày sinh của khách hàng.
+	MaKH, HoTen, NgaySinhKH
+7.Danh sách sản phẩm không xuất hiện trong bất kỳ hóa đơn nào: Hiển thị mã sản phẩm và tên sản phẩm.
+	MaSP, TenSP
+8.Tìm khách hàng có hóa đơn đầu tiên được ghi nhận: Hiển thị mã khách hàng, họ tên khách hàng, và ngày đăng ký hóa đơn đầu tiên.
+	MaKH, HoTen, NgayDangKy
+9.Danh sách hóa đơn với tổng giá trị cao nhất theo từng khách hàng: Hiển thị số hóa đơn, họ tên khách hàng, và trị giá cao nhất của hóa đơn.
+	SoHD, HoTenKH, TriGiaCaoNhat
+10.Danh sách các sản phẩm có giá lớn hơn giá trung bình: Hiển thị mã sản phẩm, tên sản phẩm, và giá.
+	MaSP, TenSP, Gia

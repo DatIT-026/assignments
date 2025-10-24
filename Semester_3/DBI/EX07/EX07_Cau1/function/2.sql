@@ -1,0 +1,11 @@
+CREATE FUNCTION fn_LayThongTinNhaCungCap (@MaNhaCC VARCHAR(5))
+RETURNS INT
+AS
+BEGIN
+    DECLARE @TongSoHoaDon INT;
+    
+    SELECT @TongSoHoaDon = COUNT(SoDH) FROM DONDATHANG
+    WHERE MaNCC = @MaNhaCC;
+    
+    RETURN ISNULL(@TongSoHoaDon, 0);
+END;
