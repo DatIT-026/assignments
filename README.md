@@ -20,5 +20,9 @@ First! Clone this repo if you want to use or modify it:
 
 **Lab211**: I use Java btw.
 
+**CSD201**: There is a source folder for you to do this PE of subject
+
+**DBI202**: Install SQL Server 2019
+
 ## License
 This repo is licensed under the [MIT License](LICENSE).

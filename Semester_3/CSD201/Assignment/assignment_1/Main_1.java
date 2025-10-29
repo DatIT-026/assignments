@@ -22,50 +22,62 @@ class LinkedList {
         head = newNode;
     }
 
-    // insert at the end, before null
+    // insert at the end
     public void addLast(int data) {
         Node newNode = new Node(data);
+        
         if (head == null) {
             head = newNode;
             return;
         }
 
-        Node current = head;
-        while (current.next != null) current = current.next;
-        current.next = newNode;
+        // duyet node
+        Node curr = head;
+        while (curr.next != null) {
+            curr = curr.next;
+        }
+
+        curr.next = newNode;
     }
 
     // insert at the given positition (0-based index)
-    public void insertAtPosition(int position, int data) {
-        if (position == 0) {
+    public void insertAtPosition(int pos, int data) {
+        // neu insert vao dau
+        if (pos == 0) {
             addFirst(data); 
             return;
         }
 
         Node newNode = new Node(data);
-        Node current = head;
+        Node curr = head;
 
-        for (int i = 0; i < position - 1 && current != null; i++) {
-            current = current.next;
+        // di den truoc vi tri can chen
+        for (int i = 0; i < pos - 1 && curr != null; i++) {
+            curr = curr.next;
         }
 
-        if (current == null) return;
-        newNode.next = current.next;
-        current.next = newNode;
+        if (curr == null) {
+            System.out.println("Position out of bounds.");   
+            return;
+        }
+
+        // insert new Node at this pos
+        newNode.next = curr.next;
+        curr.next = newNode;
     }
 
     public void sort() {
         if (head == null || head.next == null) return;
 
-        Node current, index;
+        Node i, j;
 
-        for (current = head; current.next != null; current = current.next) {
-            for (index = current.next; index != null; index = index.next) {
-                if (current.data > index.data) {
+        for (i = head; i.next != null; i = i.next) {
+            for (j = i.next; j != null; j = j.next) {
+                if (i.data > j.data) {
                     // Swap values
-                    int temp = current.data;
-                    current.data = index.data;
-                    index.data = temp;
+                    int temp = i.data;
+                    i.data = j.data;
+                    j.data = temp;
                 }
             }
         }
@@ -73,9 +85,9 @@ class LinkedList {
 
     // insert in a sorted list
     public void insertSorted(int data) {
+        sort(); // sort list first
+        
         Node newNode = new Node(data);
-
-        sort();
 
         if (head == null || data < head.data) {
             newNode.next = head;
@@ -83,65 +95,86 @@ class LinkedList {
             return;
         }
 
-        Node current = head;
-        while (current.next != null && current.next.data < data) current = current.next;
+        Node curr = head;
+        while (curr.next != null && curr.next.data < data) {
+            curr = curr.next;
+        }
 
-        newNode.next = current.next;
-        current.next = newNode;
+        newNode.next = curr.next;
+        curr.next = newNode;
     }
 
     // delete first node
     public void deleteFirst() {
-        if (head != null) head = head.next;
+        if (head == null) return;
+        head = head.next;
     }
 
     // delete last node
     public void deleteLast() {
-        Node current = head;
-        while (current.next.next != null) current = current.next;
-        current.next = null;
-    }
-
-    // delete at position
-    public void deleteAtPosition(int position) {
         if (head == null) {
-            System.out.println("List is empty.");
+            System.out.println("List is empty!");
             return;
         }
 
-        // Deleting head (position 0)
-        if (position == 0) {
+        // if there is only 1 node
+        if (head.next == null) {
+            head = null;
+            return;
+        }
+
+        Node curr = head;
+        while (curr.next.next != null) {
+            curr = curr.next;
+        }
+        curr.next = null;
+    }
+
+    // delete at position
+    public void deleteAtPosition(int pos) {
+        if (head == null) {
+            System.out.println("List is empty!");
+            return;
+        }
+
+        // deleting head (position 0)
+        if (pos == 0) {
             head = head.next;
             return;
         }
 
-        Node current = head;
+        Node curr = head;
 
-        // Traverse to the node before the one to delete
-        for (int i = 0; i < position - 1; i++) {
-            if (current == null || current.next == null) {
+        // traverse to the node before the one to delete
+        for (int i = 0; i < pos - 1; i++) {
+            if (curr == null || curr.next == null) {
                 System.out.println("Position out of bounds.");
                 return;
             }
-            current = current.next;
+            curr = curr.next;
         }
 
-        // If position is invalid (e.g., greater than list size)
-        if (current.next == null) {
+        // if position is invalid
+        if (curr.next == null) {
             System.out.println("Position out of bounds.");
             return;
         }
 
-        // Delete the node
-        current.next = current.next.next;
+        // delete the node
+        curr.next = curr.next.next;
     }
 
     public void printList() {
-        Node current = head;
+        if (head == null) {
+            System.out.println("\nList is empty!");
+            return;
+        }
+        
+        Node curr = head;
         System.out.println("\n--------------------------------------");
-        while (current != null) {
-            System.out.print(current.data + " -> ");
-            current = current.next;
+        while (curr != null) {
+            System.out.print(curr.data + " -> ");
+            curr = curr.next;
         }
 
         System.out.print("null\n");
@@ -159,21 +192,23 @@ public class Main_1 {
             System.out.println("1. Insertion");
             System.out.println("2. Deletion");
             System.out.println("3. Display List");
-            System.out.print("Choose an option: ");
-            int mainChoice = sc.nextInt();
+            System.out.print("Your choice: ");
+            
+            int choice = sc.nextInt();
 
-            switch (mainChoice) {
+            switch (choice) {
                 case 1:
-                    System.out.println("\n-- Insertion Menu --");
-                    System.out.println("1. Insert at Beginning");
-                    System.out.println("2. Insert at End");
-                    System.out.println("3. Insert at Position");
-                    System.out.println("4. Insert then Sort");
-                    System.out.print("Choose insertion type: ");
-                    int insChoice = sc.nextInt();
+                    System.out.println("\n-- Insertion --");
+                    System.out.println("1. at the beginning");
+                    System.out.println("2. at the end");
+                    System.out.println("3. at the given location");
+                    System.out.println("4. at the sorted list");
+                    System.out.print("Your choice: ");
+                    
+                    int addChoice = sc.nextInt();
 
                     int data, pos;
-                    switch (insChoice) {
+                    switch (addChoice) {
                         case 1:
                             System.out.print("Enter data to insert at beginning: ");
                             data = sc.nextInt();
@@ -206,14 +241,14 @@ public class Main_1 {
                     break;
 
                 case 2:
-                    System.out.println("\n-- Deletion Menu --");
-                    System.out.println("1. Delete First Node");
-                    System.out.println("2. Delete Last Node");
-                    System.out.println("3. Delete at Position");
-                    System.out.print("Choose deletion type: ");
+                    System.out.println("\n-- Deletion --");
+                    System.out.println("1. of first node");
+                    System.out.println("2. of last Node");
+                    System.out.println("3. of given item");
+                    System.out.print("Your choice: ");
+
                     int delChoice = sc.nextInt();
 
-                    int item;
                     switch (delChoice) {
                         case 1:
                             list.deleteFirst();
