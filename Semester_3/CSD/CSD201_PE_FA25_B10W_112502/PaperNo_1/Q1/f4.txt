@@ -1,0 +1,18 @@
+--- Initial State ---
+--- Task BST ---
+(T05, Write_Documentation, P:4)
+(T02, Update_UI, P:5)
+(T04, Test_New_Feature, P:7)
+(T03, Fix_Login_Bug, P:8)
+(T06, Refactor_Database, P:9)
+(T01, Deploy_Server, P:10)
+
+>>> Testing f4: Removing task with priority 4...
+
+--- Final State ---
+--- Task BST ---
+(T02, Update_UI, P:5)
+(T04, Test_New_Feature, P:7)
+(T03, Fix_Login_Bug, P:8)
+(T06, Refactor_Database, P:9)
+(T01, Deploy_Server, P:10)

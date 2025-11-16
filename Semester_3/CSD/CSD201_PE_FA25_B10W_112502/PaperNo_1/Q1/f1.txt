@@ -1,0 +1,9 @@
+>>> Testing f1: CompletionQueue isEmpty() and enqueue()
+Is queue empty initially? Yes
+Enqueuing two tasks...
+Is queue empty now? No
+
+Final Queue State:
+--- Completion Queue ---
+(C01, Completed_A, P:99)
+(C02, Completed_B, P:100)

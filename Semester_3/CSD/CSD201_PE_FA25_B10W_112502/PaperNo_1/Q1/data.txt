@@ -1,0 +1,5 @@
+6
+T03 T01 T05 T02 T04 T06
+Fix_Login_Bug Deploy_Server Write_Documentation Update_UI Test_New_Feature Refactor_Database
+8 10 4 5 7 9
+4

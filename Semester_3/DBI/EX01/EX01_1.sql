@@ -1,0 +1,1 @@
+SELECT Name From Student WHERE Major = 'Computer Science';

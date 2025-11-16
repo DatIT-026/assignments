@@ -1,0 +1,4 @@
+Action Log Stack: (Action7,Modified) (Action6,Placed) (Action5,Returned) (Action4,Canceled) (Action3,Shipped) (Action2,Updated) (Action1,Placed) 
+Order BST: (Order0,F,2500.0) (Order1,D,3000.0) (Order2,B,200.0) (Order3,E,150.0) (Order4,C,500.0) (Order6,A,1000.0) (Order9,G,800.0) 
+Action Log Stack: (Action6,Placed) (Action5,Returned) (Action3,Shipped) (Action2,Updated) (Action1,Placed) 
+Order BST: (Order0,F,2500.0) (Order1,D,3000.0) (Order2,B,200.0) (Order4,C,500.0) (Order6,A,1000.0) (Order9,G,800.0) 

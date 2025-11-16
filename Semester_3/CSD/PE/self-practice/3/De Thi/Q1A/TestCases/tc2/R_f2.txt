@@ -1,0 +1,6 @@
+Before:
+ItemList Inventory: (Box, 10, 2, 15) (Lamp, 5, 1, 10) (Shoe, 80, 3, 20) (Sofa, 50, 2, 5) (TV, 20, 1, 1) (Chair, 7, 1, 7) (Money, 5, 9, 8) (Diamond, 100, 3, 30) (Phone, 10, 5, 2) 
+Truck Contents: (Pot, 10, 10, 10) (Bed, 100, 2, 4) 
+After:
+ItemList Inventory: (Shoe, 80, 3, 20) (Sofa, 50, 2, 5) (Diamond, 100, 3, 30) 
+Truck Contents: (Phone, 10, 5, 2) (Money, 5, 9, 8) (Chair, 7, 1, 7) (TV, 20, 1, 1) (Lamp, 5, 1, 10) (Box, 10, 2, 15) (Pot, 10, 10, 10) (Bed, 100, 2, 4) 

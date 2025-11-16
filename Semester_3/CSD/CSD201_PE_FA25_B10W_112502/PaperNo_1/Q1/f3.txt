@@ -1,0 +1,10 @@
+>>> Testing f3: Traversing the BST pre-order...
+
+--- Final State ---
+--- Task BST ---
+(T03, Fix_Login_Bug, P:8)
+(T05, Write_Documentation, P:4)
+(T02, Update_UI, P:5)
+(T04, Test_New_Feature, P:7)
+(T01, Deploy_Server, P:10)
+(T06, Refactor_Database, P:9)

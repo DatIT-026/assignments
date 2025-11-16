@@ -1,0 +1,132 @@
+.cpt {
+  cursor: pointer;
+}
+
+.stared {
+  background-color: var(--c-warning);
+}
+
+.answered {
+  background-color: var(--c-warning-bg);
+}
+
+.right-answer {
+  background-color: var(--c-warning-bg);
+}
+
+/* Styles for custom checkbox */
+.custom-checkbox-container {
+  display: flex;
+  align-items: baseline;
+}
+
+.custom-checkbox-container > label {
+  margin-left: 5px;
+}
+
+.custom-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  top: 5px;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  border: 1px solid #adb5bd;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+  margin-right: 5px; /* Adjust spacing between checkbox and text */
+  position: relative; /* Required for :after pseudo-element */
+}
+
+.custom-checkbox:checked {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.custom-checkbox:checked:after {
+  content: '\2714'; /* Checkmark symbol */
+  font-size: 12px;
+  position: absolute;
+  top: 0px; /* Adjust vertical position */
+  left: 3px; /* Adjust horizontal position */
+  color: #fff;
+}
+
+
+/* Styles for custom radio */
+.custom-radio-container {
+  display: flex;
+  align-items: baseline;
+}
+
+.custom-radio-container > label {
+  margin-left: 5px;
+}
+
+.custom-radio {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  top: 3px;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  border: 1px solid #adb5bd;
+  border-radius: 50%; /* Make it circular */
+  outline: none;
+  cursor: pointer;
+  margin-right: 5px; /* Adjust spacing between radio button and text */
+  position: relative; /* Required for :after pseudo-element */
+}
+
+.custom-radio:checked {
+  border-color: #007bff;
+  background-color: #007bff;
+}
+
+.custom-radio:checked:after {
+  content: ''; /* Empty content */
+  width: 10px;
+  height: 10px;
+  border-radius: 50%; /* Make it circular */
+  background-color: #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Center the dot */
+}
+
+/* Input */
+.custom-input {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+input[type="password"] {
+  padding: 8px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+/* Button */
+.action-pw-button {
+  font-weight: bold;
+  border: 1px solid var(--c-text);
+  cursor: pointer;
+  padding: 8px 12px;
+  background-color: transparent;
+  border-radius: 5px;
+  transition: background 0.3s, color 0.3s;
+}
+.action-pw-button:hover {
+  background-color: #6c757d;
+  color: white;
+}
