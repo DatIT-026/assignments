@@ -2,7 +2,6 @@ package services;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 import model.Mountain;
 
 public class MountainList {
@@ -24,7 +23,7 @@ public class MountainList {
                 f = new FileReader(filename); // mo file
                 r = new BufferedReader(f); // doc tuan tu tung dong
                 r.readLine(); // doc dong dau tien trong file va bo di, vi no la lable
-                while (r.ready()) { // ktra xem du lieu co dc doc hay không
+                while (r.ready()) {
                     String s = r.readLine();        // s la 1 dong trong file
                     String[] result = s.split(","); // cut chuoi s dua vao ','
                     

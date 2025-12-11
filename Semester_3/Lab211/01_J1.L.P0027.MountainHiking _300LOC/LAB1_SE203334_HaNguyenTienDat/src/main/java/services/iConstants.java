@@ -1,6 +1,6 @@
 package services;
 
-public interface    iConstants {
+public interface iConstants {
     public final String MountainCodePattern="^[0-9]+$";
     public final String MountainNamePattern="^[a-zA-Z0-9 ]+$";
     public final String MountainLocationPattern="^[a-zA-Z ]+$";
