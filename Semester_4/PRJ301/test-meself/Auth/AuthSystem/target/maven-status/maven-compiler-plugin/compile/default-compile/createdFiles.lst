@@ -1,0 +1,13 @@
+com\mycompany\authsystem\infrastructure\ValidationUtil.class
+com\mycompany\authsystem\controller\GoogleLoginServlet.class
+com\mycompany\authsystem\model\UserDAO.class
+com\authsystem\authsystem\model\UserDTO.class
+com\mycompany\authsystem\infrastructure\EmailTemplateLoader.class
+com\mycompany\authsystem\infrastructure\EmailService.class
+com\mycompany\authsystem\infrastructure\EmailService$1.class
+com\mycompany\authsystem\controller\LoginServlet.class
+com\mycompany\authsystem\infrastructure\DatabaseConnection.class
+com\mycompany\authsystem\error\ValidationError.class
+com\mycompany\authsystem\infrastructure\GoogleOAuthUtil$GoogleUserInfo.class
+com\mycompany\authsystem\infrastructure\GoogleOAuthUtil.class
+com\mycompany\authsystem\controller\DispatchServlet.class

@@ -1,0 +1,974 @@
+/*
+   PROJECT: SMART DOOR LOCK
+   ARDUINO A
+*/
+
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h> // LCD control
+#include <Servo.h>
+#include <Keypad.h>
+#include <Adafruit_Fingerprint.h>
+#include <SoftwareSerial.h>
+#include <EEPROM.h>
+
+// HARDWARE CONFIGURATION
+
+// Software serial configuration
+SoftwareSerial fpSerial(2, 3); // pin 2 (RX), 3 (TX) connected to fingerprint sensor
+Adafruit_Fingerprint finger = Adafruit_Fingerprint(&fpSerial); // assign serial to fingerprint library
+SoftwareSerial btSerial(10, 11); // pin 10 (RX), 11 (TX) connected to HC-05 Bluetooth
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+Servo srv;
+#define SERVO_PIN 9
+#define BUZZER_PIN 8
+#define BUTTON_PIN 12
+
+// KEYPAD CONFIG
+const byte ROWS = 4;
+const byte COLS = 4;
+char keys[ROWS][COLS] = {
+  {'1', '2', '3', 'A'},
+  {'4', '5', '6', 'B'},
+  {'7', '8', '9', 'C'},
+  {'*', '0', '#', 'D'}
+};
+byte rowPins[ROWS] = {A0, A1, A2, A3};
+byte colPins[COLS] = {4, 5, 6, 7};
+Keypad kpd = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
+
+// DATA CONFIG
+#define MAX_USERS 10
+#define NAME_LEN 11
+
+struct FingerprintUser {
+  uint8_t id; // id
+  char name[NAME_LEN]; // username
+};
+
+struct RFIDUser {
+  byte uid[4];
+  char name[NAME_LEN];
+};
+
+// EEPROM MAP
+#define MAGIC_NUMBER  0xD1
+
+#define EE_MAGIC_ADDR 0
+#define EE_FP_COUNT   2
+#define EE_RF_COUNT   3
+#define EE_USER_PASS  10
+#define EE_SYS_PASS   30
+#define EE_FP_ADDR    100
+#define EE_RF_ADDR    250
+
+// Global Variables
+// Password and Security
+char userPass[13];
+char sysPass[13];
+bool isAppAuthenticated = false;
+
+// User data
+FingerprintUser fpUsers[MAX_USERS];
+byte fpCount = 0;
+RFIDUser rfUsers[MAX_USERS];
+byte rfCount = 0;
+
+// Keypad input buffer
+char input[13];
+byte inputLen = 0;
+unsigned long lastKey = 0;
+
+// Bluetooth buffer
+char btBuffer[30];
+byte btIndex = 0;
+
+// Timers & LCD
+// Fingerprint scanning
+unsigned long lastCheck = 0;
+const int CHECK_INTERVAL = 300; // 300ms
+
+// Ultrasonic scanning (ask Adruino B)
+unsigned long lastUltrasonicRequest = 0;
+const int ULTRASONIC_POLL_RATE = 200;
+
+// Message display management
+unsigned long lastMessageTime = 0;
+const int MSG_HOLD_TIME = 2000; // 2s
+
+// Door state
+bool doorOpen = false;
+unsigned long doorOpenTime = 0;
+
+// Screen state and Power saving
+bool lcdActive = false;
+unsigned long lastIdleUpdate = 0;
+const int IDLE_UPDATE_INTERVAL = 5000;
+bool needsIdleUpdate = true;
+
+unsigned long lastMotionTime = 0; // last interaction time (key press, Bluetooth, sensor)
+const unsigned long MOTION_TIMEOUT = 5000; // 5s
+
+// FUNCTION PROTOTYPES
+
+// Memory Management (EEPROM)
+void initEEPROM();
+void saveAllData();
+
+// Screen and Message Management
+// __FlashStringHelper* helps save RAM by storing strings in Flash
+void msg_P(const __FlashStringHelper* l1, const __FlashStringHelper* l2); // display static message
+void msg_temp(const __FlashStringHelper* l1, const __FlashStringHelper* l2, int delayTime); // display temporary message and then clear
+void err(const __FlashStringHelper* r);
+void wakeUpLCD();
+void markMessageShown();
+void updateIdleScreen();
+
+// Hardware Control
+void openDoor(const __FlashStringHelper* r);
+void beep(int duration);
+
+// Main Logic Processing
+void processCommand();
+void handleKey(char k);
+void checkUltrasonic();
+void clearBuffer();
+
+// Fingerprint Management
+void enrollFP(char* name);
+void deleteFP_ByIndex(int index);
+void showFPList();
+int getFP(); // scan and identify fingerprint (return ID)
+
+// RFID Management
+void enrollRFID(char* name);
+void deleteRFID_ByIndex(int index);
+void showListRFID();
+String dumpUID(byte* uid); // convert UID from byte array to HEX string for display
+
+// Password Management
+void updateHomePass(char* p);
+void updateSysPass(char* p);
+bool checkHomePass(char* p);
+void showUserPass();
+
+// SETUP
+void setup() {
+  Serial.begin(9600); // enable Serial for debugging
+  btSerial.begin(9600);
+
+  // start I2C communication
+  Wire.begin();
+  Wire.setClock(400000L);
+
+  // clear input and bluetooth buffers
+  memset(input, 0, sizeof(input));
+  memset(btBuffer, 0, sizeof(btBuffer));
+
+  // set button pin as INPUT_PULLUP (HIGH idle, LOW when pressed)
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+
+  // initialize LCD
+  lcd.init();
+  lcd.backlight();
+  lcdActive = true;
+  lcd.clear();
+
+  lcd.print(F("System Booting"));
+  markMessageShown();
+
+  // set buzzer pin as OUTPUT
+  pinMode(BUZZER_PIN, OUTPUT);
+  beep(100);
+
+  initEEPROM();
+
+  srv.attach(SERVO_PIN);
+  srv.write(0); // move servo to 0 degree (lock door)
+  fpSerial.begin(57600);
+  if (finger.verifyPassword()) {
+    Serial.println(F("Sensor OK"));
+  } else {
+    lcd.setCursor(0, 1); lcd.print(F("SENSOR ERROR!"));
+    beep(500);
+  }
+  delay(500);
+
+  lcd.clear();
+  lcd.noBacklight();
+  lcdActive = false;
+
+  btSerial.listen(); // switch to Bluetooth listening
+  Serial.println(F("=== READY ==="));
+  btSerial.println(F(">> LOCKED. ENTER PASS:"));
+}
+
+// LOOP
+void loop() {
+  // Physical Button
+  // highest priority, check continuously
+  if (!doorOpen && digitalRead(BUTTON_PIN) == LOW) {
+    delay(50); // debounce delay
+    if (digitalRead(BUTTON_PIN) == LOW) {
+      msg_P(F("Button Pressed"), F("Opening Door..."));
+      openDoor(F("Manual Button"));
+      delay(1000); // prevent repeated presses
+    }
+  }
+
+  // Bluetooth Listen
+  btSerial.listen(); // ensure Bluetooth is being listened to
+  while (btSerial.available() > 0) {
+    char c = btSerial.read(); // read 1 character
+    if (c == '\n' || c == '\r') {
+      // if buffer has data
+      if (btIndex > 0) {
+        btBuffer[btIndex] = '\0'; // add string terminator
+        processCommand();
+        btIndex = 0; // reset buffer index
+      }
+    } else if (btIndex < 29 && (isAlphaNumeric(c) || c == ':' || c == ' ')) {
+      btBuffer[btIndex++] = c;
+    }
+  }
+
+  // Ultrasonic
+  // check if it's time to poll Arduino B (every 200ms)
+  if (millis() - lastUltrasonicRequest > ULTRASONIC_POLL_RATE) {
+    // only poll if no important message is being displayed (avoid flicker)
+    if (millis() - lastMessageTime > MSG_HOLD_TIME) {
+      checkUltrasonic();
+    }
+    lastUltrasonicRequest = millis(); // update last poll time
+    btSerial.listen(); // return to Bluetooth listening
+  }
+
+  // Finger
+  if (lcdActive && !doorOpen && inputLen == 0 && (millis() - lastCheck > CHECK_INTERVAL)) {
+    if (millis() - lastMessageTime > MSG_HOLD_TIME) {
+      fpSerial.listen(); // switch listening to fingerprint sensor
+      int fpID = getFP(); // get finger ID
+
+      if (fpID > 0) {
+        char userName[12] = "Unknown";
+        for (int i = 0; i < fpCount; i++) {
+          if (fpUsers[i].id == fpID) {
+            strcpy(userName, fpUsers[i].name);
+            break;
+          }
+        }
+        lcd.clear();
+        lcd.setCursor(0, 0); lcd.print(F("Hello:"));
+        lcd.setCursor(0, 1); lcd.print(userName);
+        markMessageShown();
+
+        btSerial.listen();
+        String log = "OPEN FP:" + String(userName);
+        btSerial.println(log);
+
+        beep(200);
+        srv.write(90); // unlock door
+        doorOpen = true;
+        doorOpenTime = millis();
+      }
+      else if (fpID == -2) { // if fingerprint doesn't match
+        btSerial.listen();
+        err(F("Wrong Finger"));
+      }
+      lastCheck = millis(); // update last scan time
+      btSerial.listen();
+    }
+  }
+
+  // 5. Keypad
+  if (lcdActive && !doorOpen) {
+    char k = kpd.getKey();
+    if (k) handleKey(k);
+  }
+
+  // 6. Idle Screen
+  if (lcdActive && !doorOpen && inputLen == 0 && needsIdleUpdate) {
+    if ((millis() - lastIdleUpdate > IDLE_UPDATE_INTERVAL) && (millis() - lastMessageTime > MSG_HOLD_TIME)) {
+      updateIdleScreen();
+      lastIdleUpdate = millis();
+      needsIdleUpdate = false;
+    }
+  }
+
+  // Timeout Input
+  if (lcdActive && !doorOpen && inputLen > 0 && (millis() - lastKey > 10000)) {
+    lcd.clear();
+    lcd.setCursor(0, 0); lcd.print(F("Input Timeout!"));
+    markMessageShown();
+    beep(600);
+    delay(1500);
+
+    lcd.clear();
+    lcd.noBacklight();
+    lcdActive = false;
+
+    inputLen = 0;
+    memset(input, 0, sizeof(input));
+    needsIdleUpdate = true;
+  }
+
+  // Auto Sleep
+  if (lcdActive && !doorOpen && (millis() - lastMotionTime > MOTION_TIMEOUT)) {
+    if (millis() - lastMessageTime > MSG_HOLD_TIME) {
+      lcd.clear();
+      lcd.noBacklight();
+      lcdActive = false;
+      inputLen = 0;
+      memset(input, 0, sizeof(input));
+      needsIdleUpdate = true;
+    }
+  }
+
+  // Auto Close Door
+  if (doorOpen) {
+    if ((millis() - doorOpenTime > 5000) && (millis() - lastMotionTime > 2000)) {
+      srv.write(0);
+      doorOpen = false;
+
+      lcd.clear();
+      lcd.print(F("Door Closed"));
+      markMessageShown();
+
+      btSerial.println(F(">> Door Closed (Auto)"));
+      beep(100);
+      delay(500);
+
+      inputLen = 0;
+      needsIdleUpdate = true;
+      updateIdleScreen();
+      lastMotionTime = millis();
+      btSerial.listen();
+    }
+  }
+}
+
+// DISPLAY & HANDLING LOGIC
+
+// Wake up the LCD
+void wakeUpLCD() {
+  if (!lcdActive) {
+    lcd.backlight();
+    lcdActive = true;
+  }
+  
+  lastMotionTime = millis(); // reset idle timer (start counting 5s from now)
+}
+
+// Display static message from Flash memory (saves RAM)
+// l1: line 1, l2: line 2
+void msg_P(const __FlashStringHelper* l1, const __FlashStringHelper* l2) {
+  wakeUpLCD();
+  
+  lcd.clear(); // clear previous content
+  lcd.setCursor(0, 0); lcd.print(l1);
+  lcd.setCursor(0, 1); lcd.print(l2);
+  // update timestamp to prevent other functions from clearing it too soon
+  markMessageShown();
+}
+
+// Display temp message with delay (for status messages that disappear after a while)
+void msg_temp(const __FlashStringHelper* l1, const __FlashStringHelper* l2, int delayTime) {
+  wakeUpLCD();
+  
+  lcd.clear();
+  lcd.setCursor(0, 0); lcd.print(l1);
+  lcd.setCursor(0, 1); lcd.print(l2);
+  markMessageShown();
+
+  btSerial.print(F(">> ")); btSerial.println(l1);
+  delay(delayTime);
+  btSerial.listen();
+}
+
+// BLUETOOTH COMMAND HANDLING
+void processCommand() {
+  Serial.print(F("CMD: "));
+  Serial.println(btBuffer);
+
+  // check password (login)
+  if (!isAppAuthenticated) {
+    if (strcmp(btBuffer, sysPass) == 0) {
+      isAppAuthenticated = true;
+      btSerial.println(F(">> LOGIN SUCCESS. WELCOME!"));
+      wakeUpLCD();
+    } else {
+      btSerial.println(F(">> WRONG PASS. TRY AGAIN:"));
+      err(F("Hack Attempt!"));
+    }
+    clearBuffer();
+    return;
+  }
+
+  wakeUpLCD();
+
+  // Command handling (after login successfully)
+  if (strcmp(btBuffer, "SHOWPASS") == 0) showUserPass();
+  else if (strcmp(btBuffer, "OPEN") == 0) openDoor(F("Opened!"));
+
+  else if (strncmp(btBuffer, "CHGPASS:", 8) == 0) updateHomePass(btBuffer + 8); // btBuffer + 8 means skip first 8 characters ("CHGPASS:") to get password part
+  else if (strncmp(btBuffer, "CHGSYS:", 7) == 0) updateSysPass(btBuffer + 7);
+
+  // fingerprint management
+  else if (strncmp(btBuffer, "ADDFIN:", 7) == 0) enrollFP(btBuffer + 7);
+  else if (strncmp(btBuffer, "DELFIN:", 7) == 0) deleteFP_ByIndex(atoi(btBuffer + 7)); // atoi converts string to int
+  else if (strcmp(btBuffer, "LISTFIN") == 0) showFPList();
+
+  // RFID management
+  else if (strncmp(btBuffer, "ADDRFID:", 8) == 0) enrollRFID(btBuffer + 8);
+  else if (strncmp(btBuffer, "DELRFID:", 8) == 0) deleteRFID_ByIndex(atoi(btBuffer + 8));
+  else if (strcmp(btBuffer, "LISTRFID") == 0) showListRFID();
+
+  // system commands
+  else if (strcmp(btBuffer, "CLRADMIN") == 0) {
+    EEPROM.write(EE_MAGIC_ADDR, 0xFF);
+    msg_temp(F("Resetting..."), F(""), 1000);
+    setup(); // restart microcontroller
+  }
+  else if (strcmp(btBuffer, "LOGOUT") == 0) {
+    isAppAuthenticated = false;
+    btSerial.println(F(">> LOGGED OUT. ENTER PASS:"));
+  }
+  clearBuffer();
+}
+
+// KEYPAD HANDLING
+void handleKey(char k) {
+  lastKey = millis(); // update last key press time (for 10s timeout)
+  
+  wakeUpLCD();
+  beep(30);
+  
+  if (k == 'D') {
+    inputLen = 0;
+    memset(input, 0, sizeof(input));
+    msg_temp(F("Cleared"), F(""), 300);
+    needsIdleUpdate = true;
+    updateIdleScreen();
+  }
+  else if (k == '#') {
+    if (inputLen >= 0) {
+      input[inputLen] = '\0';
+
+      // compare input string with door password
+      if (checkHomePass(input)) {
+        msg_temp(F("Pass Correct"), F("Success!"), 1000);
+        openDoor(F("Pass OK"));
+      }
+      else {
+        err(F("Wrong Pass"));
+      }
+
+      // clear buffer to start fresh regardless of result
+      inputLen = 0;
+      memset(input, 0, sizeof(input));
+    }
+  }
+  else if (k == '*') {
+    if (inputLen > 0) { // only delete if there is a character,
+      inputLen--; // move pointer back
+      input[inputLen] = 0; // and clear character from memory
+
+      lcd.setCursor(0, 1);
+      lcd.print(F("                "));
+      lcd.setCursor(0, 1);
+      for (byte i = 0; i < inputLen; i++) lcd.print('*');
+    }
+  }
+  else if (isdigit(k)) {
+    if (inputLen < 12) {
+      if (inputLen == 0) lcd.clear();
+      
+      input[inputLen++] = k; // store key and increment length
+      
+      lcd.setCursor(0, 0); lcd.print(F("Pass:"));
+      lcd.setCursor(0, 1);
+      
+      for (byte i = 0; i < inputLen; i++) lcd.print('*');
+    }
+  }
+}
+
+// DETAILED HANDLER FUNCTIONS
+
+// Add new fingerprint
+void enrollFP(char* name) {
+  wakeUpLCD();
+  
+  if (fpCount >= MAX_USERS) {
+    err(F("Memory Full"));
+    return;
+  }
+
+  if (strlen(name) == 0) {
+    err(F("No Name"));
+    return;
+  }
+
+  // find free ID (1 to 127) in sensor
+  int freeID = -1;
+  for (int i = 1; i <= 127; i++) {
+    bool used = false;
+    for (int j = 0; j < fpCount; j++) {
+      if (fpUsers[j].id == i) { // ID already used
+        used = true;
+        break;
+      }
+    }
+    if (!used) { // Free ID found
+      freeID = i;
+      break;
+    }
+  }
+  if (freeID == -1) { // No ID space
+    err(F("Sensor Full"));
+    return;
+  }
+
+  fpSerial.listen();
+
+  lcd.clear();
+  lcd.setCursor(0, 0); lcd.print(F("Add:")); lcd.print(name);
+  lcd.setCursor(0, 1); lcd.print(F("Place finger"));
+  markMessageShown();
+
+  btSerial.listen();
+  btSerial.print(F(">> Put Finger. ID:")); btSerial.println(freeID);
+
+  fpSerial.listen();
+
+  // first capture
+  int p = -1; unsigned long t = millis();
+  while (p != FINGERPRINT_OK && (millis() - t < 10000)) {
+    p = finger.getImage();
+    delay(50);
+  }
+  if (p != FINGERPRINT_OK) {
+    btSerial.listen();
+    err(F("Timeout"));
+    return;
+  }
+
+  p = finger.image2Tz(1); // convert image 1 to feature
+  if (p != FINGERPRINT_OK) {
+    btSerial.listen();
+    err(F("Bad Image"));
+    return;
+  }
+
+   // lift finger
+  lcd.clear(); lcd.print(F("Remove finger")); beep(100); delay(1000);
+  p = 0; t = millis();
+  while (p != FINGERPRINT_NOFINGER && (millis() - t < 3000)) {
+    p = finger.getImage();
+    delay(50);
+  }
+
+  // capture confirm
+  lcd.clear(); lcd.print(F("Place Again"));
+  p = -1; t = millis();
+  while (p != FINGERPRINT_OK && (millis() - t < 10000)) {
+    p = finger.getImage();
+    delay(50);
+  }
+  if (p != FINGERPRINT_OK) {
+    btSerial.listen();
+    err(F("Timeout 2"));
+    return;
+  }
+
+  p = finger.image2Tz(2); // convert image 2
+  if (p != FINGERPRINT_OK) {
+    btSerial.listen();
+    err(F("Bad Image 2"));
+    return;
+  }
+
+  p = finger.createModel(); // compare 2 captures
+  if (p != FINGERPRINT_OK) {
+    btSerial.listen();
+    err(F("Mismatch"));
+    return;
+  }
+
+  p = finger.storeModel(freeID); // store model in sensor
+
+  btSerial.listen();
+  if (p == FINGERPRINT_OK) {
+    // save user info in RAM and EEPROM
+    fpUsers[fpCount].id = freeID;
+    strncpy(fpUsers[fpCount].name, name, NAME_LEN);
+    fpCount++;
+    saveAllData();
+    msg_temp(F("FP Added!"), F("Success"), 1000);
+  } else {
+    err(F("Save Error"));
+  }
+}
+
+// Delete fingerprint by index
+void deleteFP_ByIndex(int index) {
+  wakeUpLCD();
+  int arrayIdx = index - 1; // convert user index (1, 2, 3..) to array index (0, 1, 2..)
+
+  // check if index is valid
+  if (arrayIdx < 0 || arrayIdx >= fpCount) {
+    btSerial.println(F(">> Invalid Index"));
+    return;
+  }
+
+  int sensorID = fpUsers[arrayIdx].id;
+  char nameDel[NAME_LEN]; strcpy(nameDel, fpUsers[arrayIdx].name);
+
+  fpSerial.listen();
+  // delete fingerprint model from sensor first
+  if (finger.deleteModel(sensorID) == FINGERPRINT_OK) {
+    // shift array elements to fill the gap
+    for (int i = arrayIdx; i < fpCount - 1; i++) fpUsers[i] = fpUsers[i + 1];
+    
+    fpCount--;
+    saveAllData();
+
+    btSerial.listen();
+    msg_temp(F("Deleted FP:"), F("Success"), 1000);
+    btSerial.print(F(">> Deleted: ")); btSerial.println(nameDel);
+  } else {
+    btSerial.listen();
+    err(F("Sensor Error"));
+  }
+}
+
+// Add new RFID card (continuously query Arduino B)
+void enrollRFID(char* name) {
+  wakeUpLCD();
+  
+  if (rfCount >= MAX_USERS) {
+    err(F("Memory Full"));
+    return;
+  }
+  
+  if (strlen(name) == 0) {
+    err(F("No Name"));
+    return;
+  }
+
+  msg_P(F("Scan Card..."), F(""));
+  btSerial.print(F(">> Add RF for: ")); btSerial.println(name);
+
+  unsigned long t = millis();
+  // loop waiting for card for 10s
+  while (millis() - t < 10000) {
+    Wire.requestFrom(8, 6); // Ask Arduino B
+    
+    if (Wire.available() >= 6) {
+      byte status = Wire.read(); // byte 1: card status
+      byte uid[4];
+      for (int i = 0; i < 4; i++) uid[i] = Wire.read(); // read UID
+      Wire.read(); // skip Ultrasonic byte
+      
+      if (status == 1) { // if Arduino B reports card present
+        // check if card already exists
+        for (int i = 0; i < rfCount; i++) {
+          if (memcmp(uid, rfUsers[i].uid, 4) == 0) {
+            err(F("Existed!"));
+            return;
+          }
+        }
+
+        // save new card to the list
+        memcpy(rfUsers[rfCount].uid, uid, 4);
+        strncpy(rfUsers[rfCount].name, name, NAME_LEN);
+        rfCount++;
+        saveAllData();
+        msg_temp(F("RFID Added!"), F("Success"), 1000);
+        return;
+      }
+    }
+    delay(100);
+  }
+  err(F("Timeout!")); // no card detected in 10s
+}
+
+// Delete RFID card by index
+void deleteRFID_ByIndex(int index) {
+  wakeUpLCD();
+  int arrayIdx = index - 1;
+  
+  if (arrayIdx < 0 || arrayIdx >= rfCount) {
+    btSerial.println(F(">> Invalid Index"));
+    return;
+  }
+
+  char nameDel[NAME_LEN];
+  strcpy(nameDel, rfUsers[arrayIdx].name);
+
+  // shift array to delete
+  for (int i = arrayIdx; i < rfCount - 1; i++) rfUsers[i] = rfUsers[i + 1];
+  
+  rfCount--;
+  saveAllData(); // update EEPROM
+  msg_temp(F("Deleted RFID:"), F("Success"), 1000);
+  btSerial.print(F(">> Deleted: ")); btSerial.println(nameDel);
+}
+
+// Update home password (UserPass)
+void updateHomePass(char* p) {
+  wakeUpLCD();
+
+  // check password length (1-12 characters)
+  if (strlen(p) < 1 || strlen(p) > 12) {
+    err(F("Invalid Len"));
+    return;
+  }
+  
+  strcpy(userPass, p);
+  saveAllData();
+  msg_temp(F("Home Pass Upd!"), F("Success"), 1000);
+}
+
+// Update system password (sysPass)
+void updateSysPass(char* p) {
+  wakeUpLCD();
+  
+  if (strlen(p) < 1 || strlen(p) > 12) {
+    err(F("Invalid Len"));
+    return;
+  }
+  
+  strcpy(sysPass, p);
+  saveAllData();
+  msg_temp(F("Sys Pass Upd!"), F("Login Again"), 1000);
+  isAppAuthenticated = false;
+  btSerial.println(F(">> LOCKED. ENTER NEW PASS:"));
+}
+
+void showUserPass() {
+  btSerial.print(F(">> CURRENT PASS: ")); btSerial.println(userPass);
+  msg_temp(F("Sent Pass Info"), F("Check App"), 1000);
+}
+
+void showFPList() {
+  if (fpCount == 0) {
+    btSerial.println(F(">> List Empty"));
+    return;
+  }
+  
+  msg_temp(F("Sending FP List"), F("Check App"), 1000);
+  btSerial.println(F("=== FP LIST ==="));
+  
+  for (int i = 0; i < fpCount; i++) {
+    btSerial.print(i + 1); btSerial.print(F(". ")); btSerial.print(fpUsers[i].name);
+    btSerial.print(F(" (ID:")); btSerial.print(fpUsers[i].id); btSerial.println(F(")"));
+  }
+  
+  btSerial.println(F("To Del: DELFIN:Index"));
+}
+
+void showListRFID() {
+  if (rfCount == 0) {
+    btSerial.println(F(">> List Empty"));
+    return;
+  }
+  
+  msg_temp(F("Sending RF List"), F("Check App"), 1000);
+  btSerial.println(F("=== RFID LIST ==="));
+  
+  for (int i = 0; i < rfCount; i++) {
+    btSerial.print(i + 1); btSerial.print(F(". ")); btSerial.print(rfUsers[i].name);
+    btSerial.print(F(" [")); btSerial.print(dumpUID(rfUsers[i].uid)); btSerial.println(F("]"));
+  }
+  
+  btSerial.println(F("To Del: DELRFID:Index"));
+}
+
+// HELPER FUNCTIONS
+void markMessageShown() {
+  lastMessageTime = millis();
+  wakeUpLCD();
+}
+
+void initEEPROM() {
+  if (EEPROM.read(EE_MAGIC_ADDR) != MAGIC_NUMBER) { // new chip -> perform Factory Reset
+    lcd.clear(); lcd.print(F("Factory Reset..."));
+
+    strcpy(userPass, "1234"); strcpy(sysPass, "1111"); // default user password and admin password
+    fpCount = 0; rfCount = 0; // clear user counts
+    fpSerial.listen(); finger.emptyDatabase(); // clear fingerprint sensor
+    btSerial.listen(); saveAllData(); // save default values to EEPROM
+
+    EEPROM.write(EE_MAGIC_ADDR, MAGIC_NUMBER); // mark as initialized
+    delay(1000);
+  } else { // existing chip -> load data from EEPROM to RAM
+    EEPROM.get(EE_FP_COUNT, fpCount);
+    EEPROM.get(EE_RF_COUNT, rfCount);
+    EEPROM.get(EE_USER_PASS, userPass);
+    EEPROM.get(EE_SYS_PASS, sysPass);
+    EEPROM.get(EE_FP_ADDR, fpUsers);
+    EEPROM.get(EE_RF_ADDR, rfUsers);
+  }
+}
+
+void saveAllData() {
+  EEPROM.put(EE_FP_COUNT, fpCount);
+  EEPROM.put(EE_RF_COUNT, rfCount);
+  EEPROM.put(EE_USER_PASS, userPass);
+  EEPROM.put(EE_SYS_PASS, sysPass);
+  EEPROM.put(EE_FP_ADDR, fpUsers);
+  EEPROM.put(EE_RF_ADDR, rfUsers);
+}
+
+// I2C communication with Arduino B (Slave)
+void checkUltrasonic() {
+  Wire.requestFrom(8, 6); // request 6 bytes from Arduino 8
+
+  if (Wire.available() >= 6) { // if all bytes received
+    byte status = Wire.read(); // byte 1: card status
+    byte uid[4]; // next 4 bytes: card UID
+
+    for (int i = 0; i < 4; i++) uid[i] = Wire.read(); // Byte 2-5: Card UID
+
+    byte dist = Wire.read(); // byte 6: Ultrasonic sensor
+
+    // Handle RFID
+    if (lcdActive && !doorOpen && status == 1) {
+      bool found = false;
+      char uName[12];
+
+      // compare received UID with saved list
+      for (int i = 0; i < rfCount; i++) {
+        if (memcmp(uid, rfUsers[i].uid, 4) == 0) {
+          found = true;
+          strcpy(uName, rfUsers[i].name);
+          break;
+        }
+      }
+
+      if (found) {
+        lcd.clear(); lcd.print(F("Hi: ")); lcd.print(uName);
+        openDoor(F("RFID OK")); // open door
+      }
+      else err(F("Unknown Card"));
+    }
+
+    // Handle Ultrasonic sensor
+    if (dist == 1) { // if person detected
+      wakeUpLCD();
+      if (!lcdActive && !doorOpen) {
+        // only show message if enough wait time has passed (avoid flicker)
+        if (millis() - lastMessageTime > MSG_HOLD_TIME) {
+          lcd.clear();
+          lcd.print(F("Welcome Home!"));
+          lcd.setCursor(0, 1); lcd.print(F("Please Verify"));
+
+          btSerial.listen();
+          btSerial.println(F(">> MOTION DETECTED"));
+
+          beep(50);
+          delay(800);
+          btSerial.listen();
+
+          needsIdleUpdate = true;
+          updateIdleScreen();
+        }
+      }
+    }
+  }
+}
+
+void updateIdleScreen() {
+  if (!lcdActive || doorOpen) return;
+
+  lcd.clear();
+  lcd.setCursor(0, 0); lcd.print(F("Locked"));
+  lcd.setCursor(0, 1); lcd.print(F("Enter Pass..."));
+}
+
+// Perform door opening action
+void openDoor(const __FlashStringHelper* r) { // r is the reason for opening (stored in Flash to save RAM)
+  wakeUpLCD();
+
+  lcd.clear();
+  lcd.print(F("STATUS: ")); lcd.print(r);
+  markMessageShown(); // update timestamp to hold this message for a while
+
+  btSerial.listen();
+  btSerial.print(F(">> OPEN: ")); btSerial.println(r);
+
+  beep(200);
+  srv.write(90); // unlock door (rotate servo to 90 degree)
+  doorOpen = true; // indicate the door is open
+  doorOpenTime = millis(); // record opening time (to auto-close after 5s)
+}
+
+// Report system error
+void err(const __FlashStringHelper* r) { // r is the error message
+  wakeUpLCD();
+  
+  lcd.clear(); lcd.print(F("ERROR!"));
+  lcd.setCursor(0, 1); lcd.print(r);
+  markMessageShown();
+
+  btSerial.listen();
+  btSerial.print(F(">> ERR: ")); btSerial.println(r);
+
+  for (byte i = 0; i < 3; i++) {
+    beep(80);
+    delay(80);
+  }
+  
+  delay(600);
+  btSerial.listen();
+
+  needsIdleUpdate = true;
+  updateIdleScreen();
+}
+
+// Check userPass
+bool checkHomePass(char* p) {
+  if (strcmp(userPass, p) == 0) return true;
+  return false;
+}
+
+// Convert the RFID card (UID) from byte array into a HEX string for printing.
+String dumpUID(byte* uid) {
+  String res = "";
+  for (byte i = 0; i < 4; i++) {
+    if (uid[i] < 0x10) res += "0"; // add leading zero if less than 16 (for example: 0xA becomes "0A")
+    res += String(uid[i], HEX); // convert to hexadecimal (HEX)
+  }
+  res.toUpperCase();
+  return res;
+}
+
+// Generate beep sound
+void beep(int duration) {
+  tone(BUZZER_PIN, 4500, duration);
+  delay(duration);
+  noTone(BUZZER_PIN);
+}
+
+// Clear Bluetooth buffer
+void clearBuffer() {
+  // read and discard all remaining data in buffer to avoid misinterpreting commands
+  while (btSerial.available()) btSerial.read();
+}
+
+// Get fingerprint ID from sensor
+int getFP() {
+  uint8_t p = finger.getImage(); // capture fingerprint image
+  if (p != FINGERPRINT_OK) return -1;
+  
+  p = finger.image2Tz(); // convert image to features
+  if (p != FINGERPRINT_OK) return -1;
+  
+  p = finger.fingerFastSearch(); // search in sensor memory
+  if (p == FINGERPRINT_OK) return finger.fingerID; // return ID if found
+  else if (p == FINGERPRINT_NOTFOUND) return -2; // return -2 if no match
+  
+  return -1;
+}

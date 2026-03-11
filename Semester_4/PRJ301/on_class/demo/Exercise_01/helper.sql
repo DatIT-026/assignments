@@ -1,0 +1,2 @@
+﻿TRUNCATE TABLE Products;
+DBCC CHECKIDENT ('Products', RESEED, 1);
