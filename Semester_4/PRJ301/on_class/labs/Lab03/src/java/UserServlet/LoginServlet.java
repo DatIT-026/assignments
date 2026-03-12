@@ -37,7 +37,6 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = invalidPage;
-        response.setContentType("text/html; charset=UTF-8");
         String userName = request.getParameter("txtUsername");
         String password = request.getParameter("txtPassword");
         try {

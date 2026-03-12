@@ -2,6 +2,10 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/datto/Desktop/PRJ301/on_class/labs/Lab03/src/java/DBUtils/UserDAO.java</file>
+            <file>file:/C:/Users/datto/Desktop/PRJ301/on_class/labs/Lab03/src/java/UserServlet/LoginServlet.java</file>
+            <file>file:/C:/Users/datto/Desktop/PRJ301/on_class/labs/Lab03/src/java/UserServlet/RemoveServlet.java</file>
+        </group>
     </open-files>
 </project-private>

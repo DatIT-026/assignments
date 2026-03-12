@@ -31,7 +31,6 @@ public class BookServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
             response.setContentType("text/html;charset=UTF-8");
-            /* TODO output your page here. You may use following sample code. */
             
             String id = request.getParameter("txtId");
             String title = request.getParameter("txtTitle");

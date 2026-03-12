@@ -16,7 +16,7 @@
     </head>
     <body>
         <%
-            String lastName = null, searchValue=null;
+            String lastName = null, searchValue = null;
             User userLoggedIn = (User) session.getAttribute("userLoggedIn");
             if (userLoggedIn != null) {
                 lastName = userLoggedIn.getLastName();

@@ -83,7 +83,7 @@ public class UserDAO {
                 lastName = rs.getString(2);
                 isAdmin = rs.getBoolean(3);
                 user = new User(userName, password, lastName, isAdmin);
-            }//end while
+            }
         } catch (Exception ex) {
             throw ex;
         } finally {
@@ -121,7 +121,7 @@ public class UserDAO {
                 isAdmin = rs.getBoolean(4);
                 User user = new User(userName, password, lastName, isAdmin);
                 userList.add(user);
-            }//end while
+            }
         } catch (Exception ex) {
             throw ex;
         } finally {

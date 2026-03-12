@@ -5,7 +5,6 @@
             30
         </session-timeout>
     </session-config>
-    
     <welcome-file-list>
         <welcome-file>Login.html</welcome-file>
     </welcome-file-list>

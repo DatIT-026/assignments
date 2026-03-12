@@ -1,4 +1,4 @@
-/*
+    /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
@@ -33,7 +33,7 @@ public class ManageUserServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String userName, password, LastName;
+        String userName, password, fullName;
         boolean isAdmin = true;
         String action;
         response.setContentType("text/html;charset=UTF-8");
@@ -48,7 +48,6 @@ public class ManageUserServlet extends HttpServlet {
             out.println("<body>");
             userName = request.getParameter("txtUserName");
             UserDAO userDAO = new UserDAO();
-            
             if (action.equals("view")) {
                 out.println("<h1>View User List" + "</h1>");
                 List<User> userList = userDAO.getUserList();
@@ -64,12 +63,12 @@ public class ManageUserServlet extends HttpServlet {
                 }
             } else {
                 password = request.getParameter("txtPassword");
-                LastName = request.getParameter("txtFullName");
+                fullName = request.getParameter("txtFullName");
                 String admin = request.getParameter("chkIsAdmin");
                 
                 if (admin == null) isAdmin = false;
                 
-                User user = new User(userName, password, LastName, isAdmin);
+                User user = new User(userName, password, fullName, isAdmin);
                 if (action.equals("add")) {
                     out.println("<h1>Users Management - Add new user" + "</h1>");
                     if (userDAO.addUser(user) == true) {

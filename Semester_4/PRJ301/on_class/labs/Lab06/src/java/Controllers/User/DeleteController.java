@@ -49,7 +49,7 @@ public class DeleteController extends HttpServlet {
             } else {
                 if (!userName.isEmpty()) {
                     if (userDao.deleteUser(userName) == true) {
-                        message = "<b style='color: green'>The user has bean deleted successfully.</b>";
+                        message = "<b style='color: green'>The user has been deleted successfully.</b>";
                     } else {
                         message = "<b style='color: red'>Something went wrong.</b>";
                     }
