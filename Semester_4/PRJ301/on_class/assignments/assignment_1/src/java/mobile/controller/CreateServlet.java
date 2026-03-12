@@ -47,24 +47,24 @@ public class CreateServlet extends HttpServlet {
         String mobileId = request.getParameter("mobileId");
         String mobileName = request.getParameter("mobileName");
         String description = request.getParameter("description");
-        
+
         String priceStr = request.getParameter("price");
         String yearStr = request.getParameter("yearOfProduction");
         String quantityStr = request.getParameter("quantity");
-        
+
         boolean notSale = request.getParameter("notSale") != null;
 
         try {
             // validate ID
-            if (!mobileId.matches("^M\\d{3}$")) {
+            if (mobileId == null || mobileId.trim().length() == 0 || mobileId.trim().length() > 10) {
                 isError = true;
-                errorObj.setMobileIdError("Mobile ID must follow format MXXX (e.g., M001)");
+                errorObj.setMobileIdError("Mobile ID must be between 1 and 10 characters");
             }
 
             // validate name's length
-            if (mobileName.trim().length() < 2 || mobileName.trim().length() > 50) {
+            if (mobileName.trim().length() < 2 || mobileName.trim().length() > 20) {
                 isError = true;
-                errorObj.setMobileNameError("Mobile Name must be between 2 and 50 characters");
+                errorObj.setMobileNameError("Mobile Name must be between 2 and 20 characters");
             }
 
             // validate price: >0
@@ -86,7 +86,7 @@ public class CreateServlet extends HttpServlet {
                 year = Integer.parseInt(yearStr);
                 if (year < 1800 || year > 2100) {
                     isError = true;
-                    errorObj.setYearOfProductionError("Year must be in range 1800 to 2100");
+                    errorObj.setYearOfProductionError("Year must be in range 1800 to 2100.");
                 }
             } catch (NumberFormatException e) {
                 isError = true;
@@ -99,7 +99,7 @@ public class CreateServlet extends HttpServlet {
                 quantity = Integer.parseInt(quantityStr);
                 if (quantity < 0) {
                     isError = true;
-                    errorObj.setQuantityError("Quantity cannot be negative");
+                    errorObj.setQuantityError("Quantity must be positive!");
                 }
             } catch (NumberFormatException e) {
                 isError = true;

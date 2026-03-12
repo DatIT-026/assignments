@@ -10,7 +10,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Search Mobile</title>
+        <title>Search Page</title>
     </head>
     <body>
         <c:if test="${empty sessionScope.USER_INFO}">
@@ -63,6 +63,20 @@
         </div>
 
         <div>
+            <div>
+                <c:if test="${not empty err.yearOfProductionError}">
+                    <font color="red">${err.yearOfProductionError}</font><br />
+                </c:if>
+
+                <c:if test="${not empty err.quantityError}">
+                    <font color="red">${err.quantityError}</font><br />
+                </c:if>
+
+                <c:if test="${not empty err.priceError}">
+                    <font color="red">${err.priceError}</font><br />
+                </c:if>
+            </div>
+
             <c:if test="${not empty requestScope.MOBILE_LIST}">
                 <table border="1">
                     <thead>
@@ -81,20 +95,11 @@
                         <c:forEach var="mobile" items="${requestScope.MOBILE_LIST}">
                         <form action="MainController" method="POST">
                             <tr>
-                                <td>
-                                    ${mobile.mobileId}
-                                    <input type="hidden" name="mobileId" value="${mobile.mobileId}" />
-                                </td>
-                                <td>
-                                    ${mobile.mobileName}
-                                    <input type="hidden" name="mobileName" value="${mobile.mobileName}" />
-                                </td>
-                                <td>
-                                    <input type="text" name="yearOfProduction" value="${mobile.yearOfProduction}" />
-                                </td>
-
                                 <c:if test="${sessionScope.USER_INFO.role == 1}">
-                                    <td><input type="text" name="description" value="${mobile.description}" /></td>
+                                    <td><input name="mobileId" value="${mobile.mobileId}" readonly="true"/></td>
+                                    <td><input name="mobileName" value="${mobile.mobileName}" readonly="true" /></td>
+                                    <td><input type="text" name="yearOfProduction" value="${mobile.yearOfProduction}" /></td>
+                                    <td><input type="text" name="description" value="${mobile.description}" maxlength="50" /></td>
                                     <td><input type="number" step="0.01" name="price" value="${mobile.price}" /></td>
                                     <td><input type="number" name="quantity" value="${mobile.quantity}" /></td>
                                     <td>
@@ -109,6 +114,18 @@
                                 </c:if>
 
                                 <c:if test="${sessionScope.USER_INFO.role == 0}">
+                                    <td>
+                                        ${mobile.mobileId}
+                                        <input type="hidden" name="mobileId" value="${mobile.mobileId}" readonly="true"/>
+                                    </td>
+                                    <td>
+                                        ${mobile.mobileName}
+                                        <input type="hidden" name="mobileName" value="${mobile.mobileName}" readonly="true" />
+                                    </td>
+                                    <td>
+                                        ${mobile.yearOfProduction}
+                                        <input type="hidden" name="yearOfProduction" value="${mobile.yearOfProduction}" />
+                                    </td>
                                     <td>
                                         ${mobile.description}
                                         <input type="hidden" name="description" value="${mobile.description}" />
@@ -138,18 +155,6 @@
                     </c:forEach>
                     </tbody>
                 </table>
-
-                <c:if test="${not empty err.yearOfProductionError}">
-                    <font color="red">${err.yearOfProductionError}</font><br />
-                </c:if>
-
-                <c:if test="${not empty err.quantityError}">
-                    <font color="red">${err.quantityError}</font><br />
-                </c:if>
-
-                <c:if test="${not empty err.priceError}">
-                    <font color="red">${err.priceError}</font><br />
-                </c:if>
             </c:if>
 
             <c:if test="${empty requestScope.MOBILE_LIST}">

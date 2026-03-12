@@ -58,7 +58,7 @@
                                 <td>${mobile.mobileName}</td>
                                 <td>${mobile.price}</td>
                                 <td>
-                                    <input type="number" name="quantity" value="${mobile.quantity}" min="1" required style="width: 60px;"/>
+                                    <input type="number" name="quantity" value="${mobile.quantity}" min="1" required />
                                 </td>
                                 <td>
                                     <fmt:formatNumber value="${mobile.price * mobile.quantity}" pattern="0.00"/>
@@ -66,8 +66,7 @@
                                 </td>
                                 <td>
                                     <input type="submit" name="btAction" value="Update Cart" />
-                                    <input type="submit" name="btAction" value="Remove Cart" 
-                                           onclick="return confirm('Remove ${mobile.mobileName} from cart?');" />
+                                    <input type="submit" name="btAction" value="Remove Cart" />
                                 </td>
                             </tr>
                         </form>

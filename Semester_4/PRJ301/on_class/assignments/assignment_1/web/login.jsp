@@ -29,14 +29,15 @@
         
         <form action="MainController" method="POST">
             <div class="form-group">
-            <label>User ID:</label>
-            <input type="text" name="txtUserID" value=""  /><br/>
+                <label>User ID:</label>
+                <input type="text" name="txtUserID" value=""  /><br/>
             </div>
             
             <div class="form-group">
-            <label>Password:</label>
-            <input type="password" name="txtPassword" value="" /><br/>
+                <label>Password:</label>
+                <input type="password" name="txtPassword" value="" /><br/>
             </div>
+            
             <input type="submit" value="Login" name="btAction" />
             <input type="reset" value="Reset" />
         </form>

@@ -93,7 +93,13 @@ public class UpdateServlet extends HttpServlet {
                 MobileDTO mobile = new MobileDTO(
                         mobileId, description, price, mobileName, year, quantity, notSale);
                 MobileDAO dao = new MobileDAO();
-                dao.updateMobile(mobile);
+                boolean result = dao.updateMobile(mobile);
+                
+                if (result) {
+                    request.setAttribute("SUCCESS", "Successfully updated Mobile ID: " + mobileId);
+                } else {
+                    request.setAttribute("ERROR", "Failed to updated.");
+                }
             }
         } catch (Exception e) {
             log("Error at UpdateServlet: " + e.toString());

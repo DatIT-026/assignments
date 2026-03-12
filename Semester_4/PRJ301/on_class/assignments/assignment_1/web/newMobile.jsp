@@ -57,7 +57,7 @@
                 <!-- Device Name -->
                 <div class="form-group">
                     <label for="mobileName">Device Name:</label>
-                    <input type="text" name="mobileName" value="${param.mobileName}" required maxlength="50" /> <br />
+                    <input type="text" name="mobileName" value="${param.mobileName}" required maxlength="20" /> <br />
                     <c:if test="${not empty err.mobileNameError}">
                         <font color="red">${err.mobileNameError}</font><br />
                     </c:if>
@@ -66,7 +66,7 @@
                 <!-- Description -->
                 <div class="form-group">
                     <label for="description">Description:</label>
-                    <input type="text" name="description" value="${param.description}" maxlength="250" /> <br />
+                    <input type="text" name="description" value="${param.description}" maxlength="50" /> <br />
                 </div>
 
                 <!-- Price -->
