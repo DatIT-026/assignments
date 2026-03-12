@@ -124,7 +124,7 @@ public class MobileDAO implements Serializable {
         }
     }
     
-    public MobileDTO getMobileByID(int mobileID)
+    public MobileDTO getMobileByID(String mobileID)
             throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement pstm = null;
@@ -136,7 +136,7 @@ public class MobileDAO implements Serializable {
                         + "FROM Mobiles "
                         + "WHERE mobileId = ?";
                 pstm = con.prepareStatement(sql);
-                pstm.setInt(1, mobileID);
+                pstm.setString(1, mobileID);
                 rs = pstm.executeQuery();
                 if (rs.next()) {
                     return new MobileDTO(

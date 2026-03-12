@@ -4,11 +4,13 @@
  */
 package automobile.model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author datto
  */
-public class CarDTO {
+public class CarDTO implements Serializable {
     private int CarID;
     private String CarName;
     private String Manufacturer;

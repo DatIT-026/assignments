@@ -21,7 +21,7 @@ import mobile.model.MobileDTO;
  */
 @WebServlet(name = "RemoveCartServlet", urlPatterns = {"/RemoveCartServlet"})
 public class RemoveCartServlet extends HttpServlet {
-
+    private static final String VIEW_DETAILS_CART_PAGE = "viewCart.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -34,7 +34,7 @@ public class RemoveCartServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = "viewCart.jsp";
+        String url = VIEW_DETAILS_CART_PAGE;
         try {
             HttpSession session = request.getSession(false);
             if (session != null) {

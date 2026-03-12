@@ -5,10 +5,8 @@
 package mobile.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,28 +16,27 @@ import javax.servlet.http.HttpSession;
  *
  * @author datto
  */
-@WebServlet(name = "MainController", urlPatterns = {"/MainController"})
 public class MainController extends HttpServlet {
 
     // login and logout
     private static final String LOGIN_PAGE = "login.jsp";
     private static final String LOGIN_CONTROLLER = "LoginServlet";
     private static final String LOGOUT_CONTROLLER = "LogoutServlet";
-    
+
     // search function
-    private static final String SEARCH_CONTROLLER = "SearchServlet"; 
-    
+    private static final String SEARCH_CONTROLLER = "SearchServlet";
+
     // user's function
     private static final String ADD_TO_CART_CONTROLLER = "AddToCartServlet";
     private static final String REMOVE_CART_CONTROLLER = "RemoveCartServlet";
     private static final String UPDATE_CART_CONTROLLER = "UpdateCartServlet";
     private static final String VIEW_DETAILS_CART_CONTROLLER = "viewCart.jsp";
-    
+
     // staff's function
-    private static final String DELETE_MOBILE_CONTROLLER = "DeleteServlet"; 
-    private static final String UPDATE_CONTROLLER = "UpdateServlet"; 
-    private static final String CREATE_CONTROLLER = "newMobile.jsp";
-    private static final String INSERT_CONTROLLER = "CreateServlet";
+    private static final String DELETE_MOBILE_CONTROLLER = "DeleteServlet";
+    private static final String UPDATE_CONTROLLER = "UpdateServlet";
+    private static final String CREATE_PAGE = "newMobile.jsp";
+    private static final String CREATE_CONTROLLER = "CreateServlet";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -91,10 +88,10 @@ public class MainController extends HttpServlet {
                             url = UPDATE_CONTROLLER;
                             break;
                         case "Create":
-                            url = CREATE_CONTROLLER;
+                            url = CREATE_PAGE;
                             break;
                         case "Insert":
-                            url = INSERT_CONTROLLER;
+                            url = CREATE_CONTROLLER;
                             break;
                     }
                 }
@@ -105,7 +102,6 @@ public class MainController extends HttpServlet {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

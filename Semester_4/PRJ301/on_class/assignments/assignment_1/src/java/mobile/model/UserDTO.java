@@ -4,11 +4,13 @@
  */
 package mobile.model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author datto
  */
-public class UserDTO {
+public class UserDTO implements Serializable {
     private String userId;
     private int password;
     private String fullName;

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import mobile.model.MobileDAO;
 import mobile.model.MobileDTO;
 
 /**
@@ -21,7 +22,8 @@ import mobile.model.MobileDTO;
  */
 @WebServlet(name = "UpdateCartServlet", urlPatterns = {"/UpdateCartServlet"})
 public class UpdateCartServlet extends HttpServlet {
-
+    private static final String VIEW_DETAILS_CART_PAGE = "viewCart.jsp";
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -34,27 +36,45 @@ public class UpdateCartServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = "viewCart.jsp";
+        String url = VIEW_DETAILS_CART_PAGE;
+
         try {
+            String mobileId = request.getParameter("mobileId");
+            String quantityStr = request.getParameter("quantity");
+
             HttpSession session = request.getSession(false);
             if (session != null) {
                 Map<String, MobileDTO> cart = (Map<String, MobileDTO>) session.getAttribute("CART");
-                String mobileId = request.getParameter("mobileId");
-                String quantityStr = request.getParameter("quantity");
-                
+
                 if (cart != null && mobileId != null && quantityStr != null) {
                     int quantity = Integer.parseInt(quantityStr);
+
                     if (cart.containsKey(mobileId)) {
-                        MobileDTO item = cart.get(mobileId);
-                        item.setQuantity(quantity);
+                        MobileDAO dao = new MobileDAO();
+                        MobileDTO item = dao.getMobileByID(mobileId);
+
+                        if (item != null) {
+                            if (quantity <= item.getQuantity()) {
+                                MobileDTO dto = cart.get(mobileId);
+                                dto.setQuantity(quantity);
+                                cart.put(mobileId, dto);
+                                session.setAttribute("CART", cart);
+                            } else {
+                                request.setAttribute("ERROR", "Quantity for " + item.getMobileName()
+                                        + " must be less than or equal to " + item.getQuantity() + ".");
+                            }
+                        }
                     }
-                    session.setAttribute("CART", cart);
                 }
             }
         } catch (Exception e) {
             log("Error at UpdateCartServlet: " + e.toString());
         } finally {
-            response.sendRedirect(url); 
+            if (request.getAttribute("ERROR") != null) {
+                request.getRequestDispatcher(url).forward(request, response);
+            } else {
+                response.sendRedirect(url);
+            }
         }
     }
 

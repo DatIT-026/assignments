@@ -4,11 +4,13 @@
  */
 package mobile.model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author datto
  */
-public class MobileDTO {
+public class MobileDTO implements Serializable {
     private String mobileId;
     private String description;
     private double price;
