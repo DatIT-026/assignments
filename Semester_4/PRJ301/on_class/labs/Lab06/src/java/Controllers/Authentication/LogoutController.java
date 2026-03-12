@@ -34,7 +34,6 @@ public class LogoutController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = loginPage;
-        response.setContentType("text/html;charset=UTF-8");
         try {
             HttpSession session = request.getSession(false);
             if (session != null) {

@@ -38,7 +38,6 @@ public class CreateController extends HttpServlet {
         String userName, password, lastName;
         boolean isAdmin = true, isError = false;
         String message = null;
-        response.setContentType("text/html;charset=UTF-8");
         String url = createUserPage;
         try {
             UserDAO userDao = new UserDAO();
