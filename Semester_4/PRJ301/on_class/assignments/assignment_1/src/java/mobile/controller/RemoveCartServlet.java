@@ -43,11 +43,8 @@ public class RemoveCartServlet extends HttpServlet {
                 
                 if (cart != null && mobileId != null) {
                     cart.remove(mobileId);
-                    if (cart.isEmpty()) {
-                        session.removeAttribute("CART");
-                    } else {
-                        session.setAttribute("CART", cart);
-                    }
+                    if (cart.isEmpty()) session.removeAttribute("CART");
+                    else session.setAttribute("CART", cart);
                 }
             }
         } catch (Exception e) {

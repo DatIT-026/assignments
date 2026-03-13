@@ -25,6 +25,7 @@ import mobile.model.MobileErrorHandling;
  */
 @WebServlet(name = "SearchServlet", urlPatterns = {"/SearchServlet"})
 public class SearchServlet extends HttpServlet {
+
     public static final String LIST_PAGE = "listDevice.jsp";
 
     /**
@@ -40,52 +41,46 @@ public class SearchServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = LIST_PAGE;
+        
+        String searchValue = request.getParameter("txtSearchValue");
+        String minPriceStr = request.getParameter("minPrice");
+        String maxPriceStr = request.getParameter("maxPrice");
 
         try {
-            HttpSession session = request.getSession(false);
-            if (session != null && session.getAttribute("USER_INFO") != null) {
-                String searchValue = request.getParameter("txtSearchValue");
-                
-                String minPriceStr = request.getParameter("minPrice");
-                String maxPriceStr = request.getParameter("maxPrice");
-                
-                MobileDAO dao = new MobileDAO();
-                boolean isSearched = false;
-                
-                if (searchValue != null && searchValue.trim().length() > 0) {
-                    dao.searchMobile(searchValue);
-                    isSearched = true;
-                } else if (minPriceStr != null && maxPriceStr != null) {
-                    try {
-                        double minPrice = Float.parseFloat(minPriceStr);
-                        double maxPrice = Float.parseFloat(maxPriceStr);
-                        
-                        MobileErrorHandling errorObj = new MobileErrorHandling();
-                        boolean isError = false;
-                        
-                        if (minPrice < 0 || maxPrice < 0) {
-                            isError = true;
-                            errorObj.setPriceError("Prices must be positive numbers!");
-                        } else if (minPrice > maxPrice) {
-                            isError = true;
-                            errorObj.setPriceError("Min Price cannot be greater than Max Price!");
-                        }
-                        
-                        if (isError) {
-                            request.setAttribute("MOBILE_ERROR", errorObj);
-                        } else {
-                            dao.searchMobileByPriceRange(minPrice, maxPrice);
-                            isSearched = true;
-                        }
-                    } catch (NumberFormatException e) {
-                        log("Error parsing price: " + e.getMessage());
+            MobileDAO dao = new MobileDAO();
+            boolean isSearched = false;
+
+            if (searchValue != null && searchValue.trim().length() > 0) {
+                dao.searchMobile(searchValue);
+                isSearched = true;
+            } else if (minPriceStr != null && maxPriceStr != null) {
+                try {
+                    double minPrice = Float.parseFloat(minPriceStr);
+                    double maxPrice = Float.parseFloat(maxPriceStr);
+                    MobileErrorHandling errorObj = new MobileErrorHandling();
+                    boolean isError = false;
+
+                    if (minPrice < 0 || maxPrice < 0) {
+                        isError = true;
+                        errorObj.setPriceError("Prices must be positive numbers!");
+                    } else if (minPrice > maxPrice) {
+                        isError = true;
+                        errorObj.setPriceError("Min Price cannot be greater than Max Price!");
                     }
+
+                    if (isError) {
+                        request.setAttribute("MOBILE_ERROR", errorObj);
+                    } else {
+                        dao.searchMobileByPriceRange(minPrice, maxPrice);
+                        isSearched = true;
+                    }
+                } catch (NumberFormatException e) {
+                    log("Error parsing price: " + e.getMessage());
                 }
-                
-                if (isSearched) {
-                    List<MobileDTO> result = dao.getMobiles();
-                    request.setAttribute("MOBILE_LIST", result);
-                }
+            }
+            if (isSearched) {
+                List<MobileDTO> result = dao.getMobiles();
+                request.setAttribute("MOBILE_LIST", result);
             }
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();

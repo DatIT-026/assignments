@@ -50,7 +50,7 @@
             <c:if test="${sessionScope.USER_INFO.role == 0}">
                 <h2>User Search</h2>
                 <form action="MainController" method="POST">
-                    Search by Price Range: <br/><br/>
+                    Search by Price Range: <br/>
                     Min Price: <input type="number" step="0.01" name="minPrice" value="${param.minPrice}" required />
                     Max Price: <input type="number" step="0.01" name="maxPrice" value="${param.maxPrice}" required />
                     <input type="submit" name="btAction" value="Search" />
@@ -63,17 +63,17 @@
         </div>
 
         <div>
-            <div>
+            <div>                    
                 <c:if test="${not empty err.yearOfProductionError}">
                     <font color="red">${err.yearOfProductionError}</font><br />
                 </c:if>
 
-                <c:if test="${not empty err.quantityError}">
-                    <font color="red">${err.quantityError}</font><br />
-                </c:if>
-
                 <c:if test="${not empty err.priceError}">
                     <font color="red">${err.priceError}</font><br />
+                </c:if>
+
+                <c:if test="${not empty err.quantityError}">
+                    <font color="red">${err.quantityError}</font><br />
                 </c:if>
             </div>
 
@@ -122,22 +122,13 @@
                                         ${mobile.mobileName}
                                         <input type="hidden" name="mobileName" value="${mobile.mobileName}" readonly="true" />
                                     </td>
-                                    <td>
-                                        ${mobile.yearOfProduction}
-                                        <input type="hidden" name="yearOfProduction" value="${mobile.yearOfProduction}" />
-                                    </td>
-                                    <td>
-                                        ${mobile.description}
-                                        <input type="hidden" name="description" value="${mobile.description}" />
-                                    </td>
+                                    <td>${mobile.yearOfProduction}</td>
+                                    <td>${mobile.description}</td>
                                     <td>
                                         ${mobile.price}
                                         <input type="hidden" name="price" value="${mobile.price}" />
                                     </td>
-                                    <td>
-                                        ${mobile.quantity}
-                                        <input type="hidden" name="quantity" value="${mobile.quantity}" />
-                                    </td>
+                                    <td>${mobile.quantity}</td>
                                     <td>${mobile.notSale ? 'Yes' : 'No'}</td>
                                     <td>
                                         <input type="hidden" name="minPrice" value="${param.minPrice}" />

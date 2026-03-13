@@ -45,12 +45,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:set var="count" value="1" />
-                        <c:forEach var="entry" items="${sessionScope.CART}">
+                        <c:forEach var="entry" items="${sessionScope.CART}" varStatus="counter">
                             <c:set var="mobile" value="${entry.value}" />
                         <form action="MainController" method="POST">
                             <tr>
-                                <td>${count}</td>
+                                <td>${counter.count}</td>
                                 <td>
                                     ${mobile.mobileId}
                                     <input type="hidden" name="mobileId" value="${mobile.mobileId}" />
@@ -70,7 +69,6 @@
                                 </td>
                             </tr>
                         </form>
-                        <c:set var="count" value="${count + 1}" />
                     </c:forEach>
                     </tbody>
                 </table>

@@ -39,10 +39,11 @@ public class UpdateCartServlet extends HttpServlet {
         String url = VIEW_DETAILS_CART_PAGE;
 
         try {
+            HttpSession session = request.getSession(false);
+            
             String mobileId = request.getParameter("mobileId");
             String quantityStr = request.getParameter("quantity");
-
-            HttpSession session = request.getSession(false);
+            
             if (session != null) {
                 Map<String, MobileDTO> cart = (Map<String, MobileDTO>) session.getAttribute("CART");
 
@@ -52,7 +53,7 @@ public class UpdateCartServlet extends HttpServlet {
                     if (cart.containsKey(mobileId)) {
                         MobileDAO dao = new MobileDAO();
                         MobileDTO item = dao.getMobileByID(mobileId);
-
+                        
                         if (item != null) {
                             if (quantity <= item.getQuantity()) {
                                 MobileDTO dto = cart.get(mobileId);

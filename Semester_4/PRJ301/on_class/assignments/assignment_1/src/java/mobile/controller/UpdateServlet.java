@@ -79,7 +79,7 @@ public class UpdateServlet extends HttpServlet {
                 quantity = Integer.parseInt(quantityStr);
                 if (quantity < 0) {
                     isError = true;
-                    errorObj.setQuantityError("Quantity cannot be negative");
+                    errorObj.setQuantityError("Quantity must be positive!");
                 }
             } catch (NumberFormatException e) {
                 isError = true;

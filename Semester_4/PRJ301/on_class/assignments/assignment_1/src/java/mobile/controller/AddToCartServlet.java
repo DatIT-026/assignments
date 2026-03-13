@@ -43,9 +43,8 @@ public class AddToCartServlet extends HttpServlet {
             HttpSession session = request.getSession(false);
             if (session != null) {
                 Map<String, MobileDTO> cart = (Map<String, MobileDTO>) session.getAttribute("CART");
-                if (cart == null) {
-                    cart = new HashMap<>();
-                }
+                
+                if (cart == null) cart = new HashMap<>();
                 
                 String mobileId = request.getParameter("mobileId");
                 String mobileName = request.getParameter("mobileName");
@@ -55,8 +54,8 @@ public class AddToCartServlet extends HttpServlet {
                     double price = Double.parseDouble(priceStr);
                     
                     if (cart.containsKey(mobileId)) {
-                        MobileDTO existingItem = cart.get(mobileId);
-                        existingItem.setQuantity(existingItem.getQuantity() + 1);
+                        MobileDTO item = cart.get(mobileId);
+                        item.setQuantity(item.getQuantity() + 1);
                     } else {
                         MobileDTO newItem = new MobileDTO(mobileId, "", price, mobileName, 0, 1, false);
                         cart.put(mobileId, newItem);
