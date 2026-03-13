@@ -18,8 +18,6 @@ import java.util.List;
  * @author datto
  */
 public class CarDAO implements Serializable {
-
-    //SOLID
     List<CarDTO> cars;
 
     public List<CarDTO> getCar() {
@@ -47,9 +45,9 @@ public class CarDAO implements Serializable {
                     float Price = rs.getFloat("Price");
                     int ReleasedYear = rs.getInt("ReleasedYear");
                     CarDTO dto = new CarDTO(CarID, CarName, Manufacturer, Price, ReleasedYear);
-                    if (this.cars == null) {
-                        cars = new ArrayList<>();
-                    }
+                    
+                    if (this.cars == null) cars = new ArrayList<>();
+                    
                     this.cars.add(dto);
                 }
             }
@@ -173,7 +171,6 @@ public class CarDAO implements Serializable {
         }
 
         return result;
-
     }
 
     public boolean updateCar(CarDTO car)
@@ -214,7 +211,6 @@ public class CarDAO implements Serializable {
         }
 
         return result;
-
     }
 
 }

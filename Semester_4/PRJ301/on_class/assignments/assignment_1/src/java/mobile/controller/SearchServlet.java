@@ -50,13 +50,14 @@ public class SearchServlet extends HttpServlet {
             MobileDAO dao = new MobileDAO();
             boolean isSearched = false;
 
-            if (searchValue != null && searchValue.trim().length() > 0) {
+            if (searchValue != null && searchValue.trim().length() > 0) { // search theo id or name
                 dao.searchMobile(searchValue);
                 isSearched = true;
-            } else if (minPriceStr != null && maxPriceStr != null) {
+            } else if (minPriceStr != null && maxPriceStr != null) { // search theo price
                 try {
                     double minPrice = Float.parseFloat(minPriceStr);
                     double maxPrice = Float.parseFloat(maxPriceStr);
+                    
                     MobileErrorHandling errorObj = new MobileErrorHandling();
                     boolean isError = false;
 

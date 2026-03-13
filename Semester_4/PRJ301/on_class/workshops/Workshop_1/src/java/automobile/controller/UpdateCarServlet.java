@@ -53,7 +53,7 @@ public class UpdateCarServlet extends HttpServlet {
         CarErrorHandling errorObj = new CarErrorHandling();
         
         try {
-            // carname length hadling
+            // carName length hadling
             if (carName.trim().length() < 2 || carName.trim().length() > 50) {
                 foundErr = true;
                 errorObj.setCarNameLengthErr("Car name length must be positive and more than 2 or less than 50 characters");

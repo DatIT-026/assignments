@@ -109,8 +109,8 @@ public class CreateServlet extends HttpServlet {
             if (isError) {
                 request.setAttribute("MOBILE_ERROR", errorObj);
             } else {
-                MobileDTO newMobile = new MobileDTO(mobileId, description, price, mobileName, year, quantity, notSale);
                 MobileDAO dao = new MobileDAO();
+                MobileDTO newMobile = new MobileDTO(mobileId, description, price, mobileName, year, quantity, notSale);
                 boolean result = dao.createMobile(newMobile);
 
                 if (result) {

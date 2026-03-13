@@ -40,10 +40,7 @@ public class DispatchServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
         String url = VIEW_CAR_LIST_CONTROLLER;
-
-        // create button
         String button = request.getParameter("btAction");
 
         try {

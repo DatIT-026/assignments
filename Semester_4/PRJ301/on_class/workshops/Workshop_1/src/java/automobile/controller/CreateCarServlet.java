@@ -53,7 +53,7 @@ public class CreateCarServlet extends HttpServlet {
 
         try {
             if (carID != null && carName != null && manufacturer != null && price != null && releasedYear != null) {
-                // carid error handling
+                // carId error handling
                 int carid = 0;
                 try {
                     carid = Integer.parseInt(carID);
@@ -66,7 +66,7 @@ public class CreateCarServlet extends HttpServlet {
                     errorObj.setCarIDFormatErr("Car ID must be a number!");
                 }
                 
-                // carname length handling
+                // carName length handling
                 if (carName.trim().length() < 2 || carName.trim().length() > 50) {
                     foundErr = true;
                     errorObj.setCarNameLengthErr("Car name length must be positive and more than 2 or less than 50 characters");
@@ -105,6 +105,7 @@ public class CreateCarServlet extends HttpServlet {
 
                 if (foundErr) {
                     url = CREATE_PAGE;
+                    
                     request.setAttribute("CREATE_ERROR", errorObj);
 
                     RequestDispatcher rd = request.getRequestDispatcher(url);
@@ -118,8 +119,6 @@ public class CreateCarServlet extends HttpServlet {
                         url = MAIN_PAGE;
                         response.sendRedirect(url);
                     }
-
-                    
                 }
             }
         } catch (ClassNotFoundException ex) {
@@ -132,8 +131,10 @@ public class CreateCarServlet extends HttpServlet {
             }
             
             url = CREATE_PAGE;
+            
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);
+            
             log("CreateCarServlet_SQL: " + ex.getMessage());
         }
         finally {

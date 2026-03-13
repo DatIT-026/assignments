@@ -21,15 +21,15 @@
 
         <div>
             <a href="MainController?btAction=Logout">Logout</a>
-
-            <!-- user -->
-            <c:if test="${sessionScope.USER_INFO.role == 0}">
-                | <a href="MainController?btAction=DetailsCart">View Cart</a>
-            </c:if>
-
+            
             <!-- staff -->
             <c:if test="${sessionScope.USER_INFO.role == 1}">
                 | <a href="MainController?btAction=Create">Add New Mobile</a>
+            </c:if>
+            
+            <!-- user -->
+            <c:if test="${sessionScope.USER_INFO.role == 0}">
+                | <a href="MainController?btAction=DetailsCart">View Cart</a>
             </c:if>
         </div>
 
@@ -40,6 +40,7 @@
         <div>
             <c:if test="${sessionScope.USER_INFO.role == 1}">
                 <h2>Staff Search</h2>
+                
                 <form action="MainController" method="POST">
                     Search Mobile (by ID or Name): 
                     <input type="text" name="txtSearchValue" value="${param.txtSearchValue}" placeholder="Enter ID or Name"/>
@@ -49,12 +50,15 @@
 
             <c:if test="${sessionScope.USER_INFO.role == 0}">
                 <h2>User Search</h2>
+                
                 <form action="MainController" method="POST">
                     Search by Price Range: <br/>
-                    Min Price: <input type="number" step="0.01" name="minPrice" value="${param.minPrice}" required />
-                    Max Price: <input type="number" step="0.01" name="maxPrice" value="${param.maxPrice}" required />
+                    Min Price: <input type="number" name="minPrice" value="${param.minPrice}" required />
+                    Max Price: <input type="number" name="maxPrice" value="${param.maxPrice}" required />
                     <input type="submit" name="btAction" value="Search" />
+                    
                     <br/>
+                    
                     <c:if test="${not empty err.priceError}">
                         <font color="red">${err.priceError}</font><br />
                     </c:if>
@@ -100,14 +104,11 @@
                                     <td><input name="mobileName" value="${mobile.mobileName}" readonly="true" /></td>
                                     <td><input type="text" name="yearOfProduction" value="${mobile.yearOfProduction}" /></td>
                                     <td><input type="text" name="description" value="${mobile.description}" maxlength="50" /></td>
-                                    <td><input type="number" step="0.01" name="price" value="${mobile.price}" /></td>
+                                    <td><input type="number" name="price" value="${mobile.price}" /></td>
                                     <td><input type="number" name="quantity" value="${mobile.quantity}" /></td>
+                                    <td><input type="checkbox" name="notSale" value="true" <c:if test="${mobile.notSale}">checked</c:if> /></td>
                                     <td>
-                                        <input type="checkbox" name="notSale" value="true" 
-                                               <c:if test="${mobile.notSale}">checked</c:if> />
-                                        </td>
-                                        <td>
-                                            <input type="hidden" name="lastSearchValue" value="${param.txtSearchValue}" />
+                                        <input type="hidden" name="lastSearchValue" value="${param.txtSearchValue}" />
                                         <input type="submit" name="btAction" value="Update" />
                                         <input type="submit" name="btAction" value="Delete" />
                                     </td>
@@ -133,9 +134,11 @@
                                     <td>
                                         <input type="hidden" name="minPrice" value="${param.minPrice}" />
                                         <input type="hidden" name="maxPrice" value="${param.maxPrice}" />
+                                        
                                         <c:if test="${!mobile.notSale && mobile.quantity > 0}">
                                             <input type="submit" name="btAction" value="Add Cart" />
                                         </c:if>
+                                        
                                         <c:if test="${mobile.notSale || mobile.quantity <= 0}">
                                             <span style="color:red;">Unavailable</span>
                                         </c:if>

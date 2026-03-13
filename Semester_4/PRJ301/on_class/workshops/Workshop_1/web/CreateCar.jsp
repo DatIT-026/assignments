@@ -18,7 +18,9 @@
             <h1>Add New Car</h1>
             <hr />
             <div class="form-container">
+                
                 <c:set var="err" value="${requestScope.CREATE_ERROR}" />
+                
                 <form action="DispatchServlet">
                     <!-- CarId -->
                     <div class="form-group">
@@ -58,7 +60,6 @@
                             <font color="red">${err.priceFormatErr}</font><br />
                         </c:if>
                     </div>
-                    
 
                     <!-- ReleasedYear -->
                     <div class="form-group">
@@ -68,7 +69,9 @@
                             <font color="red">${err.releasedYearFormatErr}</font><br />
                         </c:if>
                     </div>
+                        
                     <input type="submit" value="Create" name="btAction" class="btn-create" />
+                    
                 </form>
             </div>
         </div>

@@ -39,24 +39,24 @@ public class DeleteCarServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
-        String idP = request.getParameter("txtCarID");
-        String carStr = request.getParameter("pk");
         String url = CONFIRM_PAGE;
+        
+        String idP = request.getParameter("txtCarID");
+        String carStr = request.getParameter("pk"); // xe can xoa
 
         try {
-            CarDAO dao = new CarDAO();
             int id = Integer.parseInt(idP);
+            
+            CarDAO dao = new CarDAO();
             CarDTO dto = dao.getCarByID(id);
+            
             request.setAttribute("CAR_DETAIL", dto);
 
             if (carStr != null) {
                 int delCar = Integer.parseInt(carStr);
                 boolean result = dao.deleteCar(delCar);
 
-                if (result) {
-                    url = MAIN_PAGE;
-                }
+                if (result) url = MAIN_PAGE;
             }
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();

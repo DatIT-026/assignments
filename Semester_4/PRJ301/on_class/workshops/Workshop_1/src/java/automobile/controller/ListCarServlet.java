@@ -21,7 +21,8 @@ import javax.servlet.http.HttpServletResponse;
  * @author datto
  */
 public class ListCarServlet extends HttpServlet {
-private static final String MAIN_RESULT_PAGE = "index.jsp";
+    private static final String MAIN_RESULT_PAGE = "index.jsp";
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,6 +40,7 @@ private static final String MAIN_RESULT_PAGE = "index.jsp";
             CarDAO dao = new CarDAO();
             dao.listCar();
             List<CarDTO> result = dao.getCar();
+            
             request.setAttribute("LIST_RESULT", result);
             url = MAIN_RESULT_PAGE;
         } catch (SQLException ex) {

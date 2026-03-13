@@ -30,14 +30,17 @@ public class UserDAO implements Serializable {
                         + "From Users "
                         + "Where userId = ? "
                         + "And password = ?";
+                
                 pstm = con.prepareStatement(sql);
                 pstm.setString(1, userId);
                 pstm.setInt(2, password);
+                
                 rs = pstm.executeQuery();
 
                 if (rs.next()) {
                     String fullname = rs.getString("fullName");
                     int role = rs.getInt("role");
+                    
                     user = new UserDTO(userId, password, fullname, role);
                 }
             }

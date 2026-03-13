@@ -20,6 +20,7 @@ import mobile.util.DBUtils;
 public class MobileDAO implements Serializable {
     List<MobileDTO> mobile;
 
+    // getter
     public List<MobileDTO> getMobiles() {
         return mobile;
     }
@@ -58,6 +59,7 @@ public class MobileDAO implements Serializable {
                     if (this.mobile == null) {
                         this.mobile = new ArrayList<>();
                     }
+                    
                     this.mobile.add(dto);
                 }
             }
@@ -140,13 +142,13 @@ public class MobileDAO implements Serializable {
                 rs = pstm.executeQuery();
                 if (rs.next()) {
                     return new MobileDTO(
-                            rs.getString("mobileId"),
-                            rs.getString("description"),
-                            rs.getDouble("price"),
-                            rs.getString("mobileName"),
-                            rs.getInt("yearOfProduction"),
-                            rs.getInt("quantity"),
-                            rs.getBoolean("notSale")
+                        rs.getString("mobileId"),
+                        rs.getString("description"),
+                        rs.getDouble("price"),
+                        rs.getString("mobileName"),
+                        rs.getInt("yearOfProduction"),
+                        rs.getInt("quantity"),
+                        rs.getBoolean("notSale")
                     );
                 }
             }

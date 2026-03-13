@@ -47,29 +47,29 @@
                     <tbody>
                         <c:forEach var="entry" items="${sessionScope.CART}" varStatus="counter">
                             <c:set var="mobile" value="${entry.value}" />
-                        <form action="MainController" method="POST">
-                            <tr>
-                                <td>${counter.count}</td>
-                                <td>
-                                    ${mobile.mobileId}
-                                    <input type="hidden" name="mobileId" value="${mobile.mobileId}" />
-                                </td>
-                                <td>${mobile.mobileName}</td>
-                                <td>${mobile.price}</td>
-                                <td>
-                                    <input type="number" name="quantity" value="${mobile.quantity}" min="1" required />
-                                </td>
-                                <td>
-                                    <fmt:formatNumber value="${mobile.price * mobile.quantity}" pattern="0.00"/>
-                                    <c:set var="totalAmount" value="${totalAmount + (mobile.price * mobile.quantity)}" />
-                                </td>
-                                <td>
-                                    <input type="submit" name="btAction" value="Update Cart" />
-                                    <input type="submit" name="btAction" value="Remove Cart" />
-                                </td>
-                            </tr>
-                        </form>
-                    </c:forEach>
+                            <form action="MainController" method="POST">
+                                <tr>
+                                    <td>${counter.count}</td>
+                                    <td>
+                                        ${mobile.mobileId}
+                                        <input type="hidden" name="mobileId" value="${mobile.mobileId}" />
+                                    </td>
+                                    <td>${mobile.mobileName}</td>
+                                    <td>${mobile.price}</td>
+                                    <td>
+                                        <input type="number" name="quantity" value="${mobile.quantity}" min="1" required />
+                                    </td>
+                                    <td>
+                                        <fmt:formatNumber value="${mobile.price * mobile.quantity}" pattern="0.00"/>
+                                        <c:set var="totalAmount" value="${totalAmount + (mobile.price * mobile.quantity)}" />
+                                    </td>
+                                    <td>
+                                        <input type="submit" name="btAction" value="Update Cart" />
+                                        <input type="submit" name="btAction" value="Remove Cart" />
+                                    </td>
+                                </tr>
+                            </form>
+                        </c:forEach>
                     </tbody>
                 </table>
 

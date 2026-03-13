@@ -62,6 +62,7 @@ public class AddToCartServlet extends HttpServlet {
                     }
                     
                     session.setAttribute("CART", cart);
+                    
                     request.setAttribute("MESSAGE", "Successfully added " + mobileName + " to cart!");
                 }
             }

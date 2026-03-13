@@ -41,8 +41,10 @@ private static final String DETAIL_PAGE = "ViewDetailCar.jsp";
         
         try {
             int id = Integer.parseInt(idP);
+            
             CarDAO dao = new CarDAO();
             CarDTO dto = dao.getCarByID(id);
+            
             request.setAttribute("CAR_DETAIL", dto);
         } catch (SQLException ex) {
             ex.printStackTrace();

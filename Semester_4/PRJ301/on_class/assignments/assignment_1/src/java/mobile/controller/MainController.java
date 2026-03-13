@@ -30,7 +30,7 @@ public class MainController extends HttpServlet {
     private static final String ADD_TO_CART_CONTROLLER = "AddToCartServlet";
     private static final String REMOVE_CART_CONTROLLER = "RemoveCartServlet";
     private static final String UPDATE_CART_CONTROLLER = "UpdateCartServlet";
-    private static final String VIEW_DETAILS_CART_CONTROLLER = "viewCart.jsp";
+    private static final String VIEW_DETAILS_CART_PAGE = "viewCart.jsp";
 
     // staff's function
     private static final String DELETE_MOBILE_CONTROLLER = "DeleteServlet";
@@ -53,7 +53,6 @@ public class MainController extends HttpServlet {
 
         String url = LOGIN_PAGE;
         String button = request.getParameter("btAction");
-
         HttpSession session = request.getSession(false);
 
         try {
@@ -79,7 +78,7 @@ public class MainController extends HttpServlet {
                             url = REMOVE_CART_CONTROLLER;
                             break;
                         case "DetailsCart":
-                            url = VIEW_DETAILS_CART_CONTROLLER;
+                            url = VIEW_DETAILS_CART_PAGE;
                             break;
                         case "Delete":
                             url = DELETE_MOBILE_CONTROLLER;
