@@ -24,8 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "UpdateCarServlet", urlPatterns = {"/UpdateCarServlet"})
 public class UpdateCarServlet extends HttpServlet {
 
-    private static final String MAIN_PAGE = "ListCarServlet";
-    private static final String UPDATE_PAGE = "UpdateCar.jsp";
+    public static final String MAIN_PAGE = "ListCarServlet";
+    public static final String UPDATE_PAGE = "UpdateCar.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -65,6 +65,7 @@ public class UpdateCarServlet extends HttpServlet {
                 errorObj.setManufacturerLengthErr("Manufacturer lenght must be positive and more than 2 or less than 50 characters");
             }
             
+            // price
             float priceC = 0;
             try {
                 priceC = Float.parseFloat(price);
@@ -77,6 +78,8 @@ public class UpdateCarServlet extends HttpServlet {
                 errorObj.setPriceFormatErr("Price must be a number!");
             }
             
+            
+            // year
             int releasedYearC = 0;
             try {
                 releasedYearC = Integer.parseInt(releasedYear);

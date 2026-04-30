@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShopCart.js</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+
+    <header>
+      <h1>ShopCart.js</h1>
+      <a href="#cart-page" id="cart-icon" style="text-decoration: none; color: inherit;">
+        🛒 <span id="cart-count">0</span>
+      </a>
+    </header>
+
+    <main>
+      <!-- Bước 1: Search & Filter UI -->
+      <section id="search-section">
+        <input type="text" id="search-input" placeholder="Tìm sản phẩm..." />
+        <select id="category-select">
+          <option value="all">Tất cả danh mục</option>
+          <option value="electronics">Electronics</option>
+          <option value="clothing">Clothing</option>
+          <option value="food">Food</option>
+        </select>
+        <select id="sort-select">
+          <option value="default">Sắp xếp</option>
+          <option value="asc">Giá tăng dần</option>
+          <option value="desc">Giá giảm dần</option>
+        </select>
+      </section>
+
+      <!-- Bước 4: Loading / Error state -->
+      <div id="loading-state" style="display:none">Đang tải sản phẩm...</div>
+      <div id="error-state" style="display:none"></div>
+
+      <!-- Bước 5: Product list render ra đây -->
+      <section id="product-list"></section>
+
+      <!-- CẤU TRÚC GIỎ HÀNG -->
+      <div id="cart-page" class="cart-overlay">
+        <div class="cart-container">
+          <div class="cart-header">
+          <h2>Giỏ hàng của bạn</h2>
+          <a href="#" class="close-cart">✖ Đóng</a>
+        </div>
+
+          <!-- Bước 5: Cart render ra đây -->
+          <section id="cart-section" class="no-border">
+            <div id="cart-items"></div>
+            <div id="cart-summary"></div>
+          </section>
+
+          <!-- Bước 3: Form checkout + validate -->
+          <section id="checkout-section">
+            <h2>Thông tin giao hàng</h2>
+            <form id="checkout-form">
+              <input type="text" id="input-email" placeholder="Email" />
+              <span id="error-email" class="error-msg"></span>
+
+              <input type="text" id="input-phone" placeholder="Số điện thoại" />
+              <span id="error-phone" class="error-msg"></span>
+
+              <input type="text" id="input-coupon" placeholder="Mã giảm giá (VD: VN2024)" />
+              <span id="error-coupon" class="error-msg"></span>
+
+              <button type="button" id="btn-apply-coupon">Áp dụng mã</button>
+              <button type="submit" id="btn-checkout">Đặt hàng</button>
+            </form>
+          </section>
+        </div>
+      </div>
+
+      <!-- === TOAST NOTIFICATION === -->
+      <div id="toast-notification">
+        <span class="toast-text">✅ Đã thêm vào giỏ hàng!</span>
+        <a href="#cart-page" class="toast-btn">Xem giỏ hàng</a>
+      </div>
+    </main>
+
+    <script type="module" src="main.js"></script>
+  </body>
+</html>

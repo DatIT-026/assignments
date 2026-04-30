@@ -24,7 +24,7 @@
                 <form action="DispatchServlet">
                     <!-- CarId -->
                     <div class="form-group">
-                        <label for="CarId">CarId</label>
+                        <label>CarId</label>
                         <input type="text" name="txtCarID" value="${param.txtCarID}" required /> <br />
                         <c:if test="${not empty err.carIDFormatErr}">
                             <font color="red">${err.carIDFormatErr}</font><br />
@@ -36,7 +36,7 @@
                     
                     <!-- CarName -->              
                     <div class="form-group">
-                        <label for="CarName">CarName</label>
+                        <label>CarName</label>
                         <input type="text" name="txtCarName" value="${param.txtCarName}" required /> <br />
                         <c:if test="${not empty err.carNameLengthErr}">
                             <font color="red">${err.carNameLengthErr}</font><br />
@@ -54,7 +54,7 @@
 
                     <!-- Price -->
                     <div class="form-group">
-                        <label for="Price">Price</label>
+                        <label>Price</label>
                         <input type="text" name="txtPrice" value="${param.txtPrice}" required /> <br />
                         <c:if test="${not empty err.priceFormatErr}">
                             <font color="red">${err.priceFormatErr}</font><br />
@@ -63,7 +63,7 @@
 
                     <!-- ReleasedYear -->
                     <div class="form-group">
-                        <label for="ReleasedYear">ReleasedYear</label>
+                        <label>ReleasedYear</label>
                         <input type="text" name="txtReleasedYear" value="${param.txtReleasedYear}" required /> <br />
                         <c:if test="${not empty err.releasedYearFormatErr}">
                             <font color="red">${err.releasedYearFormatErr}</font><br />

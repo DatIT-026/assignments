@@ -16,13 +16,13 @@
                 <form action="DispatchServlet">
                     <!-- CarId -->  
                     <div class="form-group">
-                        <label for="CarName">Car Id</label>
+                        <label>Car Id</label>
                         <input type="text" name="txtCarID" value="${param.txtCarID}" readonly="true"/> <br />
                     </div>
 
                     <!-- CarName -->              
                     <div class="form-group">
-                        <label for="CarName">Car Name</label>
+                        <label>Car Name</label>
                         <input type="text" name="txtCarName" value="${param.txtCarName}" required /> <br />
                         <c:if test="${not empty err.carNameLengthErr}">
                             <font color="red">${err.carNameLengthErr}</font><br />
@@ -31,7 +31,7 @@
 
                     <!-- Manufacturer -->
                     <div class="form-group">
-                        <label for="Manufacturer">Manufacturer</label>
+                        <label>Manufacturer</label>
                         <input type="text" name="txtManufacturer" value="${param.txtManufacturer}" required /> <br />
                         <c:if test="${not empty err.manufacturerLengthErr}">
                             <font color="red">${err.manufacturerLengthErr}</font><br />
@@ -40,7 +40,7 @@
 
                     <!-- Price -->
                     <div class="form-group">
-                        <label for="Price">Price</label>
+                        <label>Price</label>
                         <input type="text" name="txtPrice" value="${param.txtPrice}" required /> <br />
                         <c:if test="${not empty err.priceFormatErr}">
                             <font color="red">${err.priceFormatErr}</font><br />
@@ -50,7 +50,7 @@
 
                     <!-- ReleasedYear -->
                     <div class="form-group">
-                        <label for="ReleasedYear">ReleasedYear</label>
+                        <label>ReleasedYear</label>
                         <input type="text" name="txtReleasedYear" value="${param.txtReleasedYear}" required /> <br />
                         <c:if test="${not empty err.releasedYearFormatErr}">
                             <font color="red">${err.releasedYearFormatErr}</font><br />

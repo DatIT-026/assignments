@@ -7,6 +7,8 @@ package controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,9 +26,8 @@ import model.UserDto;
  */
 @WebServlet(name = "UpdateServlet", urlPatterns = {"/UpdateServlet"})
 public class UpdateServlet extends HttpServlet {
-
-    public static final String PET_PAGE = "petList.jsp";
     public static final String UPDATE_PET_PAGE = "updatePet.jsp";
+    public static final String BACK_TO_SEARCH = "MainController?action=Search&txtSearchValue=";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,37 +43,79 @@ public class UpdateServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = UPDATE_PET_PAGE;
 
+        String idStr = request.getParameter("txtId");
+        String petName = request.getParameter("txtPetName");
+        String breed = request.getParameter("txtBreed");
+        String ageStr = request.getParameter("txtAge");
+        String priceStr = request.getParameter("txtPrice");
+        String description = request.getParameter("txtDescription");
+
+        String lastSearchValue = request.getParameter("paramLastSearchValue");
+        
+        Map<String, String> errors = new HashMap<>();
+
         try {
-            int id = Integer.parseInt(request.getParameter("id"));
-            String name = request.getParameter("petName");
-            String breed = request.getParameter("breed");
-            int age = Integer.parseInt(request.getParameter("age"));
-            float price = Float.parseFloat(request.getParameter("price"));
-            String description = request.getParameter("description");
+            int id = 0;
+            try {
+                id = Integer.parseInt(idStr);
+            } catch (NumberFormatException e) {
+                errors.put("idErr", "Pet ID is invalid!");
+            }
+            
+            if (petName == null || petName.trim().length() < 2 || petName.trim().length() > 100) {
+                errors.put("nameErr", "Name length must be between 2 and 100 characters");
+            }
+            
+            if (breed == null || breed.trim().length() < 2 || breed.trim().length() > 50) {
+                errors.put("breedErr", "Breed length must be between 2 and 50 characters");
+            }
+            
+            int age = 0;
+            try {
+                age = Integer.parseInt(ageStr);
+                if (age < 0) {
+                    errors.put("ageErr", "Age must be a positive number!");
+                }
+            } catch (NumberFormatException e) {
+                errors.put("ageErr", "Age must be a valid number!");
+            }
+            
+            float price = 0;
+            try {
+                price = Float.parseFloat(priceStr);
+                if (price < 0) {
+                    errors.put("priceErr", "Price must be a positive number!");
+                }
+            } catch (NumberFormatException e) {
+                errors.put("priceErr", "Price must be a valid number!");
+            }
+            
+            if (description != null && description.trim().length() > 255) {
+                errors.put("descriptionErr", "Description length must be less than 255 characters");
+            }
 
-            HttpSession session = request.getSession(false);
-            if (session != null && session.getAttribute("USER_INFO") != null) {
-                UserDto user = (UserDto) session.getAttribute("USER_INFO");
-                if ("ST".equals(user.getRoleID())) {
-                    PetDto dto = new PetDto(id, name, breed, age, price, description);
-                    PetDao dao = new PetDao();
-                    boolean result = dao.updatePet(dto);
+            if (!errors.isEmpty()) {
+                request.setAttribute("UPDATE_ERROR", errors);
+            } else {
+                PetDao dao = new PetDao();
+                PetDto dto = new PetDto(id, petName, breed, age, price, description);
+                boolean result = dao.updatePet(dto);
 
-                    if (result) {
-                        url = "SearchServlet?updateValue=" + id;
-                    }
+                if (result) {
+                    url = BACK_TO_SEARCH + (lastSearchValue != null ? lastSearchValue : "");
                 }
             }
-        } catch (NumberFormatException ex) {
-            request.setAttribute("ERROR", "Age must be an integer and Price must be a decimal number!");
-            ex.printStackTrace();
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
-            RequestDispatcher rd = request.getRequestDispatcher(url);
-            rd.forward(request, response);
+            if (!errors.isEmpty() || url.equals(UPDATE_PET_PAGE)) {
+                RequestDispatcher rd = request.getRequestDispatcher(url);
+                rd.forward(request, response);
+            } else {
+                response.sendRedirect(url);
+            }
         }
     }
 

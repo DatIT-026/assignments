@@ -18,7 +18,7 @@
 
         <h1>Welcome ${sessionScope.USER_INFO.fullName} (${sessionScope.USER_INFO.userID})</h1>
 
-        <a href="MainController?btAction=Logout">Logout</a> | 
+        <a href="MainController?action=Logout">Logout</a> | 
         <a href="petList.jsp">Search Page</a>
     </body>
 </html>

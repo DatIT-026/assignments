@@ -12,27 +12,34 @@
         <title>Update Pet</title>
     </head>
     <body>
-        <c:if test="${empty sessionScope.USER_INFO or not (sessionScope.USER_INFO.roleID == 'ST')}">
+        <c:if test="${empty sessionScope.USER_INFO or sessionScope.USER_INFO.roleID ne 'ST'}">
             <c:redirect url="login.jsp"/>
         </c:if>
 
         <h1>Update Pet Information</h1>
+        <hr />
 
         <form action="MainController" method="POST">
-            ID: ${param.petID} <input type="hidden" name="id" value="${param.petID}" /> <br/>
-            Name: <input type="text" name="petName" value="${param.petName}" required /><br/>
-            Breed: <input type="text" name="breed" value="${param.breed}" required /><br/>
-            Age: <input type="text" name="age" value="${param.age}" required /><br/>
-            Price: <input type="text" name="price" value="${param.price}" required /><br/>
-            Description: <input type="text" name="description" value="${param.description}" /><br/>
-
-            <c:if test="${not empty requestScope.ERROR}">
-                <p style="color: red;">
-                    ${requestScope.ERROR}
-                </p>
-            </c:if>
-
-            <input type="submit" name="btAction" value="Update" />
+            <input type="hidden" name="paramLastSearchValue" value="${param.paramLastSearchValue}" />
+            ID: <input type="text" name="txtId" value="${param.txtId}" readonly />
+            <span style="color:red;">${requestScope.UPDATE_ERROR.idErr}</span> <br/>
+            
+            Name: <input type="text" name="txtPetName" value="${param.txtPetName}" />
+            <span style="color:red;">${requestScope.UPDATE_ERROR.nameErr}</span> <br/>
+            
+            Breed: <input type="text" name="txtBreed" value="${param.txtBreed}" />
+            <span style="color:red;">${requestScope.UPDATE_ERROR.breedErr}</span> <br/>
+            
+            Age: <input type="text" name="txtAge" value="${param.txtAge}" />
+            <span style="color:red;">${requestScope.UPDATE_ERROR.ageErr}</span> <br/>
+            
+            Price: <input type="text" name="txtPrice" value="${param.txtPrice}" />
+            <span style="color:red;">${requestScope.UPDATE_ERROR.priceErr}</span> <br/>
+            
+            Description: <input type="text" name="txtDescription" value="${param.txtDescription}" />
+            <span style="color:red;">${requestScope.UPDATE_ERROR.descriptionErr}</span> <br/>
+            
+            <input type="submit" name="action" value="Update" />
         </form>
     </body>
 </html>

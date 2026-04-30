@@ -32,9 +32,14 @@ First! Clone this repo if you want to use or modify it:
 
 ### Semester 4
 
-- **IOT102**: Coming Soon
+- **IOT102**: depends on your project, my project is _Smart Door Lock_.
 
-- **PRJ301**: Coming Soon
+- **PRJ301**: NetBeans 13 + SQL Server 2019 + Tomcat.
+              The `Login`, `Logout` and `Welcome page` are easy to create so don't be stupid.
+
+- **SSG104**: nah idk what is going on here
+
+- **SWE202c**: PE sucks, btw there are many templates here for u
 
 ## License
 This repo is licensed under the [MIT License](LICENSE).

@@ -17,7 +17,7 @@
         <form action="MainController" method="POST">
             User ID:  <input type="text" name="txtUserID" value=""  /><br/>
             Password: <input type="password" name="txtPassword" value="" /><br/>
-            <input type="submit" value="Login" name="btAction" />
+            <input type="submit" value="Login" name="action" />
             <input type="reset" value="Reset" />
         </form><br/>
         <c:set var="invalid" value="${requestScope.INVALID}"/>

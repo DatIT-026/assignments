@@ -1,0 +1,114 @@
+classDiagram
+  direction LR
+
+  class User {
+    - userID: String
+    - phone: String
+    - dateOfBirth: LocalDate
+    - email: String
+    + login() boolean
+    + logout() void
+    + updateProfile() void
+  }
+
+  class Student {
+    - studentID: String
+    - major: String
+    - gpa: double
+    + registerCourse(courseID) boolean
+    + viewGrades() List
+    + dropCourse(courseID) void
+  }
+
+  class Academic_Staff {
+    - staffID: String
+    - professionalEmail: String
+    - position: String
+    + manageSchedule() void
+    + generateReport() Report
+  }
+
+  class System_Administrator {
+    - adminId: String
+    - accessLevel: String
+    + manageUsers() void
+    + backupData() void
+    + configureSystem() void
+  }
+
+  class Lecturer {
+    - lecturerID: String
+    - department: String
+    - title: String
+    + viewRoster(courseID) List
+    + submitGrade(studentID, score) void
+    + publishGrades(courseID) void
+  }
+
+  class Course {
+    - courseID: String
+    - courseName: String
+    - credits: int
+    - prerequisiteID: String
+    + getPrerequisite() String
+    + updateInfo() void
+  }
+
+  class CourseOffering {
+    - offeringID: String
+    - semester: String
+    - schedule: String
+    - room: String
+    - maxSeats: int
+    - enrolled: int
+    + getAvailableSeats() int
+    + closeEnrollment() void
+  }
+
+  class Registration {
+    - regID: String
+    - regDate: Date
+    - status: String
+    + submit() void
+    + cancel() void
+    + getStatus() String
+  }
+
+  class Waitlist {
+    - waitlistID: String
+    - position: int
+    - joinDate: Date
+    + joinQueue(studentID) void
+    + notifyNext() void
+    + removeFromQueue(studentID) void
+  }
+
+  class Grade {
+    - gradeID: String
+    - midterm: double
+    - finalScore: double
+    - letterGrade: String
+    + calculate() String
+    + release() void
+    + isReleased() boolean
+  }
+
+  %% Inheritance relationships
+  User <|-- Student
+  User <|-- Lecturer
+  User <|-- Academic_Staff
+  User <|-- System_Administrator
+
+  %% Core domain relationships
+  Course "1" *-- "0..*" CourseOffering : contains
+  CourseOffering "1" *-- "0..*" Registration : has
+  CourseOffering "1" *-- "0..1" Waitlist : maintains
+
+  %% Actor associations
+  Lecturer "1" --> "0..*" CourseOffering : teaches
+  Academic_Staff "1" --> "0..*" CourseOffering : manages
+  Student "1" --> "0..*" Registration : makes
+  Waitlist "1" o-- "0..*" Student : queues
+
+  %% Grade relationship
+  Registration "1" *-- "0..1" Grade : records

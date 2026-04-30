@@ -40,7 +40,7 @@ public class MainController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         String url = LOGIN_PAGE;
-        String button = request.getParameter("btAction");
+        String button = request.getParameter("action");
         HttpSession session = request.getSession(false);
 
         try {
